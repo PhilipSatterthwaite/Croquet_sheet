@@ -3,29 +3,12 @@
 A wicket-by-wicket scorekeeper for the lawn. One HTML file, no build step, no
 server — the same shape as the LED controller app.
 
-## Put it on GitHub Pages
-
-From this folder:
-
-```sh
-git init
-git add .
-git commit -m "Croquet scorekeeper"
-git branch -M main
-git remote add origin https://github.com/<you>/<repo>.git
-git push -u origin main
-```
-
-Then **Settings → Pages → Source: Deploy from a branch → `main` / `/ (root)`**.
-A minute later it is live at `https://<you>.github.io/<repo>/`.
-
-If you would rather drop it into an existing repo, put these files in a
-subfolder — everything is referenced with relative paths, so it works from any
-depth.
+**Live: <https://philipsatterthwaite.github.io/Croquet_sheet/>**
 
 ## Install it on a phone
 
-Open the Pages URL **over https** (a `file://` copy cannot be installed).
+Open <https://philipsatterthwaite.github.io/Croquet_sheet/> **over https** — a
+`file://` copy cannot be installed.
 
 - **iPhone** — Share → Add to Home Screen.
 - **Android** — the ⋮ menu → Install app / Add to Home screen.
@@ -77,3 +60,15 @@ rules.
 | `sw.js` | offline cache — **bump `CACHE` when you change `index.html`**, or installed phones keep the old version |
 | `icon.svg` | home-screen icon |
 | `.nojekyll` | stops GitHub Pages running the files through Jekyll |
+
+## Publishing
+
+Served by GitHub Pages from `main` / `/ (root)`
+(**Settings → Pages**), so a push to `main` is a deploy:
+
+```sh
+git add -A && git commit -m "..." && git push
+```
+
+Give it a minute after pushing. Everything is referenced with relative paths,
+so the app also works from a subfolder of some other repo if you ever move it.
