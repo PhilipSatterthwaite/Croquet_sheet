@@ -1,0 +1,19 @@
+{
+  "name": "Croquet",
+  "short_name": "Croquet",
+  "description": "Wicket-by-wicket scorekeeping for six-wicket and nine-wicket croquet",
+
+  "//": "Android identifies an installed PWA by id (falling back to start_url) and caches the generated WebAPK against it. Renaming the app is invisible until that identity changes, so both carry a version marker -- bump it if a future rename sticks the same way.",
+  "id": "./?v=1",
+  "start_url": "./?v=1",
+
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1210",
+  "theme_color": "#0B1210",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

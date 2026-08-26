@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Croquet</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B1210">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Croquet">
+<!-- Only takes effect over http(s); a file:// page cannot be installed. -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230B1210'/%3E%3Cpath d='M56 136V97a34 34 0 0 1 68 0v39' fill='none' stroke='%23E9F0EB' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='117' r='19' fill='%23E03A2F'/%3E%3Crect x='37' y='142' width='106' height='7' rx='3.5' fill='%2337B24D'/%3E%3C/svg%3E">
+
+<style>
+:root{
+  --g:#0B1210; --s:#141C19; --z:#1D2723; --l:#2B3833;
+  --t:#E9F0EB; --d:#7F9089; --r:15px;
+  --acc:#4ADE80;
+}
+*{box-sizing:border-box}
+html{background:var(--g)}
+body{
+  margin:0 auto; max-width:520px;
+  padding:calc(16px + env(safe-area-inset-top)) 14px calc(96px + env(safe-area-inset-bottom));
+  background:var(--g); color:var(--t);
+  font:400 16px/1.45 ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none; -webkit-user-select:none;
+  overscroll-behavior-y:contain;
+}
+button{cursor:pointer;font:inherit}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+h2{margin:22px 0 9px;font-size:11px;font-weight:600;color:var(--d);
+  letter-spacing:.2em;text-transform:uppercase}
+
+/* ---- header ---- */
+header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{margin:0;font-size:15px;font-weight:650;letter-spacing:.22em;text-transform:uppercase}
+#sub{font-size:11px;color:var(--d);letter-spacing:.16em;text-transform:uppercase;
+  font-variant-numeric:tabular-nums}
+#reset{padding:7px 13px;border:1px solid var(--l);border-radius:99px;
+  background:var(--z);color:var(--d);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase}
+
+body[data-view=setup] #game,
+body[data-view=game]  #setup{display:none}
+body[data-view=game]  #sub,
+body[data-view=game]  #reset{display:block}
+body[data-view=setup] #sub,
+body[data-view=setup] #reset{display:none}
+
+/* ---- setup ---- */
+.seg{display:grid;gap:9px}
+.seg.row{grid-auto-flow:column;grid-auto-columns:1fr}
+.seg button{padding:13px 14px;border:1px solid var(--l);border-radius:var(--r);
+  background:var(--s);color:var(--t);text-align:left;font-size:14px}
+.seg.row button{text-align:center}
+.seg button b{display:block;font-weight:600;font-size:14px}
+.seg button span{display:block;margin-top:3px;font-size:12px;color:var(--d)}
+.seg button[aria-pressed=true]{background:var(--z);border-color:var(--acc);
+  box-shadow:0 0 0 1px var(--acc) inset}
+.seg button[disabled]{opacity:.35;pointer-events:none}
+
+.nm{display:flex;align-items:center;gap:11px;background:var(--s);
+  border:1px solid var(--l);border-radius:var(--r);padding:9px 12px;margin-bottom:8px}
+.nm input{flex:1;min-width:0;background:none;border:none;color:var(--t);
+  font:inherit;font-size:15px;padding:4px 0;user-select:text;-webkit-user-select:text}
+.nm input::placeholder{color:var(--d)}
+
+.chip{width:22px;height:22px;border-radius:50%;background:var(--c);flex:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 3px 10px -5px var(--c)}
+.chip.big{width:34px;height:34px}
+
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--s);border:1px solid var(--l);border-radius:var(--r);
+  padding:12px 14px;margin-top:12px}
+.opt[hidden]{display:none}
+.opt b{display:block;font-size:14px;font-weight:600}
+.opt i{display:block;font-style:normal;font-size:12px;color:var(--d);margin-top:2px}
+.opt input{width:24px;height:24px;accent-color:var(--acc);flex:none}
+
+#start{width:100%;margin-top:22px;padding:17px 0;border:none;border-radius:var(--r);
+  background:var(--acc);color:#06210E;font-size:14px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase}
+
+/* ---- now playing ---- */
+#now{display:flex;align-items:center;gap:12px;margin:16px 0 14px;padding:13px 14px;
+  background:var(--s);border:1px solid var(--l);border-left:4px solid var(--c);
+  border-radius:var(--r)}
+#now .who b{display:block;font-size:16px;font-weight:650}
+#now .who i{display:block;font-style:normal;font-size:12px;color:var(--d);margin-top:2px}
+#now .dots{margin-left:auto;display:flex;gap:7px}
+.dot{width:13px;height:13px;padding:0;border:none;border-radius:50%;background:var(--c);
+  opacity:.3;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.dot[data-on=true]{opacity:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),
+  0 0 0 2px var(--g),0 0 0 4px var(--t)}
+.dot[data-out=true]{opacity:.12}
+
+/* ---- teams ---- */
+#teams{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:9px;margin-bottom:16px}
+#teams[hidden]{display:none}
+.tm{background:var(--s);border:1px solid var(--l);border-radius:var(--r);padding:11px 13px}
+.tm .sw{display:flex;gap:5px;margin-bottom:7px}
+.tm .sw i{width:11px;height:11px;border-radius:50%;background:var(--c);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.tm b{display:block;font-size:12px;font-weight:600;color:var(--d);
+  letter-spacing:.06em}
+.tm em{display:block;font-style:normal;font-size:26px;font-weight:650;margin-top:3px;
+  font-variant-numeric:tabular-nums}
+
+/* ---- ball cards ---- */
+.card{background:var(--s);border:1px solid var(--l);border-radius:var(--r);
+  padding:13px 14px;margin-bottom:10px;box-shadow:inset 3px 0 0 var(--c)}
+.card[data-active=true]{border-color:var(--c);background:var(--z)}
+.card[data-out=true]{opacity:.55}
+.top{display:flex;align-items:center;gap:11px}
+.top .who b{display:block;font-size:15px;font-weight:650}
+.top .who i{display:block;font-style:normal;font-size:12px;color:var(--d);margin-top:1px}
+.pts{margin-left:auto;font-size:22px;font-weight:650;font-variant-numeric:tabular-nums}
+.pts em{font-style:normal;font-size:12px;font-weight:400;color:var(--d)}
+
+.pbar{height:5px;border-radius:3px;background:#0006;overflow:hidden;margin:11px 0 10px}
+.pbar i{display:block;height:100%;background:var(--c);border-radius:3px;
+  transition:width .2s}
+
+.tgt{font-size:13px;color:var(--d);margin-bottom:11px}
+.tgt b{color:var(--t);font-weight:650;font-size:15px}
+
+.acts{display:flex;gap:9px}
+.go{flex:1;padding:14px 0;border:none;border-radius:11px;
+  background:var(--c);color:var(--fg);font-size:13px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase}
+.go[disabled]{background:var(--z);color:var(--d);box-shadow:inset 0 0 0 1px var(--l)}
+.back{width:54px;flex:none;border:1px solid var(--l);border-radius:11px;
+  background:var(--z);color:var(--d);font-size:20px;line-height:1}
+.back[disabled]{opacity:.3}
+
+.dead{display:flex;align-items:center;gap:7px;margin-top:11px;
+  padding-top:11px;border-top:1px solid var(--l)}
+.dead>span{font-size:10px;color:var(--d);letter-spacing:.16em;text-transform:uppercase}
+.dc{width:30px;height:30px;padding:0;border-radius:50%;border:1px solid var(--l);
+  background:none;color:var(--d);font-size:12px;font-weight:700}
+.dc[data-on=true]{background:var(--c);border-color:var(--c);color:var(--fg)}
+
+/* ---- winner ---- */
+#banner{display:none;margin:16px 0;padding:15px 16px;border-radius:var(--r);
+  background:#12301C;border:1px solid #2E6B45;color:#9BE8B6}
+#banner b{display:block;font-size:17px;font-weight:650;margin-bottom:2px}
+#banner span{font-size:13px;opacity:.85}
+body[data-over=true] #banner{display:block}
+
+/* ---- bottom bar ---- */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:5;
+  display:flex;gap:9px;max-width:520px;margin:0 auto;
+  padding:11px 14px calc(11px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--g) 62%,#0B121000);
+  }
+body[data-view=setup] #bar{display:none}
+#bar button{padding:15px 0;border-radius:12px;font-size:13px;font-weight:650;
+  letter-spacing:.12em;text-transform:uppercase}
+#undo{flex:none;width:112px;border:1px solid var(--l);background:var(--z);color:var(--t)}
+#undo[disabled]{opacity:.35}
+#next{flex:1;border:none;background:var(--acc);color:#06210E}
+#next[disabled]{background:var(--z);color:var(--d);box-shadow:inset 0 0 0 1px var(--l)}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body data-view="setup" data-over="false">
+
+<header>
+  <h1>Croquet</h1>
+  <span id="sub"></span>
+  <button id="reset">New game</button>
+</header>
+
+<!-- ===================== SETUP ===================== -->
+<section id="setup">
+  <h2>Course</h2>
+  <div class="seg" id="fmt">
+    <button data-v="9" aria-pressed="true">
+      <b>Nine wicket</b><span>16 points &middot; out, turning stake, back, home stake</span></button>
+    <button data-v="6" aria-pressed="false">
+      <b>Six wicket</b><span>13 points &middot; #1&ndash;#6, then the backs, then the stake</span></button>
+  </div>
+
+  <h2>Balls</h2>
+  <div class="seg row" id="nballs">
+    <button data-v="4" aria-pressed="true">4 balls</button>
+    <button data-v="6" aria-pressed="false">6 balls</button>
+  </div>
+
+  <h2>Sides</h2>
+  <div class="seg row" id="mode">
+    <button data-v="partners" aria-pressed="true">Partners</button>
+    <button data-v="solo" aria-pressed="false">Cutthroat</button>
+  </div>
+
+  <h2>Players</h2>
+  <div id="names"></div>
+
+  <label class="opt" id="deadopt" hidden>
+    <span><b>Track deadness</b><i>Cleared automatically when a ball runs a wicket</i></span>
+    <input type="checkbox" id="deadchk" checked>
+  </label>
+
+  <button id="start">Start game</button>
+</section>
+
+<!-- ===================== GAME ===================== -->
+<section id="game">
+  <div id="banner"></div>
+  <div id="now"></div>
+  <div id="teams"></div>
+  <div id="cards"></div>
+</section>
+
+<div id="bar">
+  <button id="undo">Undo</button>
+  <button id="next">Next turn</button>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// The course. One entry per point a ball can score, in the order it scores
+// them, so a ball's whole state is a single integer: how far down this list it
+// has got. Everything else on screen is derived from that.
+// ---------------------------------------------------------------------------
+var COURSE = {
+  '6': ['#1','#2','#3','#4','#5','#6',
+        '#1-back','#2-back','#3-back','#4-back','#5-back','#6-back',
+        'Stake'],
+  '9': ['#1','#2','#3','#4','#5','#6','#7',
+        'Turning stake',
+        '#8','#9','#10','#11','#12','#13','#14',
+        'Home stake']
+};
+
+// Rotation order is the array order -- blue, red, black, yellow, green, orange
+// -- which is also the striping on the stake.
+var META = [
+  { name:'Blue',   hex:'#2F6FE4', fg:'#FFFFFF', ini:'B' },
+  { name:'Red',    hex:'#E03A2F', fg:'#FFFFFF', ini:'R' },
+  { name:'Black',  hex:'#2A3038', fg:'#FFFFFF', ini:'K' },
+  { name:'Yellow', hex:'#EFC01F', fg:'#14180F', ini:'Y' },
+  { name:'Green',  hex:'#37B24D', fg:'#06210E', ini:'G' },
+  { name:'Orange', hex:'#F0812B', fg:'#23120A', ini:'O' }
+];
+
+var KEY = 'croquet.v1';
+var S = null;      // live game, or null while in setup
+var HIST = [];     // JSON snapshots, newest last
+
+function $(id){ return document.getElementById(id); }
+function el(t){ return document.createElement(t); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+  return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+
+// --- persistence ----------------------------------------------------------
+// Written after every change: a phone will happily kill a backgrounded tab
+// between the sixth wicket and the stake.
+function save(){
+  try {
+    if (S) localStorage.setItem(KEY, JSON.stringify({ s:S, h:HIST }));
+    else   localStorage.removeItem(KEY);
+  } catch (e) {}
+}
+function restore(){
+  try {
+    var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (o && o.s && o.s.balls) { S = o.s; HIST = o.h || []; return true; }
+  } catch (e) {}
+  return false;
+}
+
+// --- setup ----------------------------------------------------------------
+var setup = { fmt:'9', nballs:4, mode:'partners', deadness:true, names:{} };
+
+function pick(group, v){
+  var wrap = $(group);
+  [].forEach.call(wrap.children, function(b){
+    b.setAttribute('aria-pressed', String(b.dataset.v === String(v)));
+  });
+}
+
+function syncSetup(){
+  pick('fmt', setup.fmt);
+  pick('nballs', setup.nballs);
+  pick('mode', setup.mode);
+
+  // Six-wicket is a four-ball game -- there is no six-ball variant of it.
+  var six = $('nballs').children[1];
+  six.disabled = (setup.fmt === '6');
+  if (six.disabled && setup.nballs === 6) { setup.nballs = 4; pick('nballs', 4); }
+
+  // Deadness is an American six-wicket rule; it has no meaning on a
+  // nine-wicket lawn, where you get one roquet per ball per turn regardless.
+  $('deadopt').hidden = (setup.fmt !== '6');
+
+  var box = $('names');
+  box.textContent = '';
+  for (var i = 0; i < setup.nballs; i++) {
+    var m = META[i];
+    var row = el('div');
+    row.className = 'nm';
+    row.style.setProperty('--c', m.hex);
+    row.innerHTML = '<span class="chip"></span>' +
+      '<input type="text" data-i="' + i + '" maxlength="18" autocomplete="off" ' +
+      'placeholder="' + m.name + '" value="' + esc(setup.names[i] || '') + '">';
+    box.appendChild(row);
+  }
+}
+
+$('fmt').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  setup.fmt = b.dataset.v; syncSetup();
+});
+$('nballs').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b || b.disabled) return;
+  setup.nballs = +b.dataset.v; syncSetup();
+});
+$('mode').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  setup.mode = b.dataset.v; syncSetup();
+});
+$('names').addEventListener('input', function(e){
+  if (e.target.dataset.i !== undefined) setup.names[e.target.dataset.i] = e.target.value;
+});
+$('deadchk').addEventListener('change', function(){ setup.deadness = this.checked; });
+
+$('start').addEventListener('click', function(){
+  var balls = [];
+  for (var i = 0; i < setup.nballs; i++) {
+    balls.push({ name: (setup.names[i] || '').trim(), pos: 0, out: false, dead: [] });
+  }
+  S = {
+    fmt: setup.fmt,
+    partners: setup.mode === 'partners',
+    deadness: setup.fmt === '6' && setup.deadness,
+    balls: balls,
+    turn: 0,
+    turnNo: 1,
+    over: null
+  };
+  HIST = [];
+  document.body.dataset.view = 'game';
+  render(); save();
+});
+
+$('reset').addEventListener('click', function(){
+  if (!confirm('End this game and start a new one?')) return;
+  S = null; HIST = [];
+  document.body.dataset.view = 'setup';
+  document.body.dataset.over = 'false';
+  save(); syncSetup();
+});
+
+// --- game mechanics -------------------------------------------------------
+function total(){ return COURSE[S.fmt].length; }
+
+// Every mutation goes through here, so undo needs no per-action bookkeeping --
+// it just reinstates the snapshot taken before the last thing that happened.
+function act(fn){
+  HIST.push(JSON.stringify(S));
+  if (HIST.length > 80) HIST.shift();
+  fn();
+  settle();
+  render();
+  save();
+}
+
+function settle(){
+  var n = S.balls.length, i;
+
+  // Winner: a side is finished when every one of its balls has staked out.
+  S.over = null;
+  if (S.partners) {
+    var sides = [[], []];
+    for (i = 0; i < n; i++) sides[i % 2].push(S.balls[i]);
+    for (var k = 0; k < 2; k++) {
+      if (sides[k].length && sides[k].every(function(b){ return b.out; })) {
+        S.over = sideName(k);
+      }
+    }
+  } else {
+    for (i = 0; i < n; i++) if (S.balls[i].out) { S.over = ballLabel(i); break; }
+  }
+  document.body.dataset.over = String(!!S.over);
+
+  // A staked-out ball is off the lawn; play moves on without it.
+  if (!S.over && S.balls[S.turn].out) nextTurn();
+}
+
+function nextTurn(){
+  var n = S.balls.length;
+  for (var k = 1; k <= n; k++) {
+    var j = (S.turn + k) % n;
+    if (!S.balls[j].out) { S.turn = j; S.turnNo++; return; }
+  }
+}
+
+function scorePoint(i){
+  var b = S.balls[i], course = COURSE[S.fmt];
+  if (b.pos >= course.length) return;
+  var label = course[b.pos];
+  b.pos++;
+  // Running a wicket clears the striker's deadness. Hitting a stake does not.
+  if (S.deadness && label.charAt(0) === '#') b.dead = [];
+  if (b.pos >= course.length) b.out = true;
+}
+
+function unscore(i){
+  var b = S.balls[i];
+  if (b.pos <= 0) return;
+  b.pos--;
+  b.out = false;
+}
+
+function sideName(k){
+  var parts = [];
+  for (var i = k; i < S.balls.length; i += 2) parts.push(META[i].name);
+  return parts.join(' & ');
+}
+function ballLabel(i){
+  return S.balls[i].name ? S.balls[i].name + ' (' + META[i].name + ')' : META[i].name;
+}
+function sideScore(k){
+  var sum = 0;
+  for (var i = k; i < S.balls.length; i += 2) sum += S.balls[i].pos;
+  return sum;
+}
+
+// --- rendering ------------------------------------------------------------
+// Six cards at most, so the whole board is rebuilt on every change rather than
+// diffed. Nothing here holds focus or scroll position that a rebuild loses.
+function render(){
+  if (!S) return;
+  var course = COURSE[S.fmt], n = S.balls.length, i, j;
+
+  $('sub').textContent = (S.fmt === '9' ? 'Nine wicket' : 'Six wicket') +
+                         ' · Turn ' + S.turnNo;
+
+  if (S.over) {
+    $('banner').innerHTML = '<b>' + esc(S.over) + ' ' +
+      (S.partners ? 'win' : 'wins') + '</b>' +
+      '<span>Undo to keep playing, or start a new game.</span>';
+  }
+
+  // now playing
+  var t = S.turn, m = META[t];
+  var dots = '';
+  for (i = 0; i < n; i++) {
+    dots += '<button class="dot" data-a="turn" data-i="' + i + '"' +
+            ' style="--c:' + META[i].hex + '"' +
+            ' data-on="' + (i === t) + '" data-out="' + S.balls[i].out + '"' +
+            ' aria-label="' + esc(ballLabel(i)) + ' to play"></button>';
+  }
+  var now = $('now');
+  now.style.setProperty('--c', m.hex);
+  now.innerHTML =
+    '<span class="chip big"></span>' +
+    '<span class="who"><b>' + m.name + ' to play</b><i>' +
+      esc(S.balls[t].name || 'for ' + (S.balls[t].out ? 'nothing' : course[S.balls[t].pos])) +
+    '</i></span>' +
+    '<span class="dots">' + dots + '</span>';
+
+  // team totals
+  var teams = $('teams');
+  if (S.partners) {
+    var html = '';
+    for (var k = 0; k < 2; k++) {
+      var sw = '';
+      for (i = k; i < n; i += 2) sw += '<i style="--c:' + META[i].hex + '"></i>';
+      html += '<div class="tm"><div class="sw">' + sw + '</div>' +
+              '<b>' + esc(sideName(k)) + '</b>' +
+              '<em>' + sideScore(k) + '</em></div>';
+    }
+    teams.innerHTML = html;
+    teams.hidden = false;
+  } else {
+    teams.hidden = true;
+    teams.innerHTML = '';
+  }
+
+  // ball cards
+  var out = '';
+  for (i = 0; i < n; i++) {
+    var b = S.balls[i], me = META[i];
+    var pct = Math.round(b.pos / course.length * 100);
+    var next = b.out ? null : course[b.pos];
+    var verb = !next ? '' : (next.charAt(0) === '#' ? 'Ran ' + next
+                                                    : 'Hit the ' + next.toLowerCase());
+
+    var deadHtml = '';
+    if (S.deadness) {
+      var chips = '';
+      for (j = 0; j < n; j++) {
+        if (j === i) continue;
+        chips += '<button class="dc" data-a="dead" data-i="' + i + '" data-j="' + j + '"' +
+                 ' style="--c:' + META[j].hex + ';--fg:' + META[j].fg + '"' +
+                 ' data-on="' + (b.dead.indexOf(j) >= 0) + '"' +
+                 ' aria-label="Dead on ' + META[j].name + '">' + META[j].ini + '</button>';
+      }
+      deadHtml = '<div class="dead"><span>Dead on</span>' + chips + '</div>';
+    }
+
+    out +=
+    '<div class="card" data-a="turn" data-i="' + i + '"' +
+        ' data-active="' + (i === S.turn) + '" data-out="' + b.out + '"' +
+        ' style="--c:' + me.hex + ';--fg:' + me.fg + '">' +
+      '<div class="top">' +
+        '<span class="chip"></span>' +
+        '<span class="who"><b>' + me.name + '</b>' +
+          (b.name ? '<i>' + esc(b.name) + '</i>' : '') + '</span>' +
+        '<span class="pts">' + b.pos + '<em>/' + course.length + '</em></span>' +
+      '</div>' +
+      '<div class="pbar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="tgt">' + (b.out ? '<b>Staked out</b>'
+                                   : 'For <b>' + next + '</b>') + '</div>' +
+      '<div class="acts">' +
+        '<button class="go" data-a="score" data-i="' + i + '"' +
+          (b.out ? ' disabled' : '') + '>' + (b.out ? 'Finished' : verb) + '</button>' +
+        '<button class="back" data-a="back" data-i="' + i + '"' +
+          (b.pos ? '' : ' disabled') + ' aria-label="Take back a point">&minus;</button>' +
+      '</div>' +
+      deadHtml +
+    '</div>';
+  }
+  $('cards').innerHTML = out;
+
+  $('undo').disabled = !HIST.length;
+  $('next').disabled = !!S.over;
+  $('next').textContent = S.over ? 'Game over'
+    : 'Next → ' + META[(function(){
+        for (var k = 1; k <= n; k++) { var j = (S.turn + k) % n; if (!S.balls[j].out) return j; }
+        return S.turn;
+      })()].name;
+}
+
+// --- input ----------------------------------------------------------------
+$('cards').addEventListener('click', function(e){
+  var hit = e.target.closest('[data-a]');
+  if (!hit || hit.disabled) return;
+  var i = +hit.dataset.i;
+
+  if (hit.dataset.a === 'score') { act(function(){ scorePoint(i); }); return; }
+  if (hit.dataset.a === 'back')  { act(function(){ unscore(i); }); return; }
+
+  if (hit.dataset.a === 'dead') {
+    var j = +hit.dataset.j;
+    act(function(){
+      var d = S.balls[i].dead, at = d.indexOf(j);
+      if (at >= 0) d.splice(at, 1); else d.push(j);
+    });
+    return;
+  }
+
+  // Tapping a card takes over the turn -- for when play jumps around, or the
+  // scorekeeper is catching up two shots late.
+  if (hit.dataset.a === 'turn' && !S.balls[i].out && i !== S.turn) {
+    act(function(){ S.turn = i; S.turnNo++; });
+  }
+});
+
+$('now').addEventListener('click', function(e){
+  var hit = e.target.closest('[data-a=turn]');
+  if (!hit) return;
+  var i = +hit.dataset.i;
+  if (S.balls[i].out || i === S.turn) return;
+  act(function(){ S.turn = i; S.turnNo++; });
+});
+
+$('next').addEventListener('click', function(){
+  if (S.over) return;
+  act(function(){ nextTurn(); });
+});
+
+$('undo').addEventListener('click', function(){
+  if (!HIST.length) return;
+  S = JSON.parse(HIST.pop());
+  document.body.dataset.over = String(!!S.over);
+  render(); save();
+});
+
+// --- boot -----------------------------------------------------------------
+if (restore()) {
+  document.body.dataset.view = 'game';
+  document.body.dataset.over = String(!!S.over);
+  render();
+} else {
+  syncSetup();
+}
+
+// Registering fails on file:// -- open the page over http(s) to install it.
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>
