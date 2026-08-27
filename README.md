@@ -25,13 +25,16 @@ on the right.
 Every ball then gets one line, so a full six-ball game sits on the screen at
 once. There is no turn order to keep up with — tap whichever ball just scored.
 
-- **Wicket 4** — the button on each row names the point that ball is playing
-  for. Tap it when the ball scores, and it rolls on to the next one. At the
-  ends of the course it reads **Turning post** and **Home post**.
-- **Undo**, at the bottom, is the only take-back there is, and it handles
-  everything: a wicket tapped by mistake, a deadness circle, the end of the
-  game. It reverses the last tap anywhere on the board, and keeps going back
-  as far as you need.
+The rows carry no words at all. A block of the ball's colour runs down the left
+of each one, and the court below says where every ball is:
+
+- **→** scores that ball's next point and moves it along the course. It turns
+  into a **✓** when the ball is home.
+- **−** takes that ball's last point back, along with the deadness that point
+  cleared.
+- **Undo**, at the bottom, reverses the last tap anywhere on the board —
+  a wicket, a deadness circle, the end of the game — and keeps going back as
+  far as you need.
 - The thin bar along the bottom of each row is that ball's progress round the
   course.
 - Under the rows is the **court**, with every ball sitting on the hoop it is
@@ -48,8 +51,9 @@ until you tap one, which lights it up: that ball is now dead on that colour.
 Scoring any point — wicket or post — puts all of that ball's circles out again
 automatically.
 
-**Undo** rewinds both together: the ball goes back a point and its circles
-return to exactly what they were before it scored.
+**−** rewinds both together: the ball goes back a point and its circles return
+to exactly what they were before it scored. Marks made *after* the point are
+discarded with the point itself. **Undo** does the same, one tap at a time.
 
 The marks are per row. Lighting Red on Blue's line says nothing about Red's.
 
