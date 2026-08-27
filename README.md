@@ -18,8 +18,9 @@ precaches everything, so it keeps working out on the lawn with no signal.
 
 ## Using it
 
-Pick the course, the number of balls, and whether you are playing partners or
-cutthroat. Names are optional.
+Tap the colours to set which balls are in play — all six start lit, and you can
+switch off any you are not using down to a minimum of two. Then pick the sides
+on the right.
 
 - **Ran #4** — scores that ball's next point and moves it along the course.
 - **−** — takes a point back.
@@ -33,22 +34,38 @@ cutthroat. Names are optional.
 The game is saved to the phone after every tap, so closing the app, locking the
 screen, or getting a phone call does not lose it. **New game** clears it.
 
+### Sides
+
+Teams are cut **across** the rotation rather than along it, the way partners
+alternate on a real lawn:
+
+| Balls | Sides | Split |
+|---|---|---|
+| 6 | 2 teams | Blue · Black · Green vs Red · Yellow · Orange |
+| 6 | 3 teams | Blue·Yellow, Red·Green, Black·Orange |
+| 4 | 2 teams | 1st · 3rd vs 2nd · 4th of whatever colours are lit |
+
+A side wins when *all* of its balls have staked out. With **No teams** it is
+cutthroat and the first ball home wins.
+
+Splits have to divide evenly, so an odd number of balls disables both team
+options, and 3 teams needs the full six. Choosing a split that a later change
+invalidates drops you back to No teams.
+
 ### Deadness
 
-Six-wicket only. Each card gets a row of chips for the other balls; tap one
-when you are dead on it. Running a wicket clears that ball's deadness
-automatically — hitting the stake does not.
+Off by default; flip it on at setup if you play the one-roquet-per-ball rule.
+Each card then gets a row of chips for the other balls — tap one when you are
+dead on it. Running a wicket clears that ball's deadness automatically; hitting
+a stake does not.
 
-## The courses
+## The course
 
-| | Points | Order |
-|---|---|---|
-| **Nine wicket** | 16 | #1–#7, turning stake, #8–#14, home stake |
-| **Six wicket** | 13 | #1–#6, #1-back–#6-back, stake |
+Nine wicket, 16 points: **#1–#7, turning stake, #8–#14, home stake.**
 
-Both are defined as a single list in `COURSE` at the top of the `<script>` in
+It is a single list called `COURSE` at the top of the `<script>` in
 [index.html](index.html) — a ball's entire state is how far down that list it
-has got, so changing the list is all it takes to match a different set of house
+has got, so editing the list is all it takes to match a different set of house
 rules.
 
 ## Files

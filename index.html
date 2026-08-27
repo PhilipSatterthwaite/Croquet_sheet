@@ -54,22 +54,26 @@ body[data-view=setup] #sub,
 body[data-view=setup] #reset{display:none}
 
 /* ---- setup ---- */
-.seg{display:grid;gap:9px}
-.seg.row{grid-auto-flow:column;grid-auto-columns:1fr}
-.seg button{padding:13px 14px;border:1px solid var(--l);border-radius:var(--r);
-  background:var(--s);color:var(--t);text-align:left;font-size:14px}
-.seg.row button{text-align:center}
-.seg button b{display:block;font-weight:600;font-size:14px}
-.seg button span{display:block;margin-top:3px;font-size:12px;color:var(--d)}
-.seg button[aria-pressed=true]{background:var(--z);border-color:var(--acc);
-  box-shadow:0 0 0 1px var(--acc) inset}
-.seg button[disabled]{opacity:.35;pointer-events:none}
+/* Balls on the left, sides on the right: the two choices are read together,
+   because how many balls are lit decides which team splits are even. */
+.pick{display:grid;grid-template-columns:1fr 128px;gap:11px;align-items:start}
+.pick h2{margin-top:16px}
+#colors{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cl{display:flex;align-items:center;gap:9px;padding:11px 10px;
+  border:1px solid var(--l);border-radius:12px;background:var(--s);
+  color:var(--d);font-size:13px;text-align:left}
+.cl .chip{opacity:.3;box-shadow:none}
+.cl[aria-pressed=true]{background:var(--z);border-color:var(--c);color:var(--t);
+  font-weight:600}
+.cl[aria-pressed=true] .chip{opacity:1;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 3px 10px -5px var(--c)}
 
-.nm{display:flex;align-items:center;gap:11px;background:var(--s);
-  border:1px solid var(--l);border-radius:var(--r);padding:9px 12px;margin-bottom:8px}
-.nm input{flex:1;min-width:0;background:none;border:none;color:var(--t);
-  font:inherit;font-size:15px;padding:4px 0;user-select:text;-webkit-user-select:text}
-.nm input::placeholder{color:var(--d)}
+#tms{display:grid;gap:8px}
+#tms button{padding:12px 6px;border:1px solid var(--l);border-radius:12px;
+  background:var(--s);color:var(--t);font-size:13px;text-align:center}
+#tms button[aria-pressed=true]{background:var(--z);border-color:var(--acc);
+  box-shadow:inset 0 0 0 1px var(--acc)}
+#tms button[disabled]{opacity:.28;pointer-events:none}
 
 .chip{width:22px;height:22px;border-radius:50%;background:var(--c);flex:none;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 3px 10px -5px var(--c)}
@@ -77,15 +81,16 @@ body[data-view=setup] #reset{display:none}
 
 .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;
   background:var(--s);border:1px solid var(--l);border-radius:var(--r);
-  padding:12px 14px;margin-top:12px}
-.opt[hidden]{display:none}
+  padding:12px 14px;margin-top:14px}
 .opt b{display:block;font-size:14px;font-weight:600}
 .opt i{display:block;font-style:normal;font-size:12px;color:var(--d);margin-top:2px}
 .opt input{width:24px;height:24px;accent-color:var(--acc);flex:none}
 
-#start{width:100%;margin-top:22px;padding:17px 0;border:none;border-radius:var(--r);
+#start{width:100%;margin-top:20px;padding:17px 0;border:none;border-radius:var(--r);
   background:var(--acc);color:#06210E;font-size:14px;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase}
+#start[disabled]{background:var(--z);color:var(--d);
+  box-shadow:inset 0 0 0 1px var(--l);pointer-events:none}
 
 /* ---- now playing ---- */
 #now{display:flex;align-items:center;gap:12px;margin:16px 0 14px;padding:13px 14px;
@@ -103,12 +108,11 @@ body[data-view=setup] #reset{display:none}
 /* ---- teams ---- */
 #teams{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:9px;margin-bottom:16px}
 #teams[hidden]{display:none}
-.tm{background:var(--s);border:1px solid var(--l);border-radius:var(--r);padding:11px 13px}
+.tm{background:var(--s);border:1px solid var(--l);border-radius:var(--r);padding:11px 12px}
 .tm .sw{display:flex;gap:5px;margin-bottom:7px}
 .tm .sw i{width:11px;height:11px;border-radius:50%;background:var(--c);
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
-.tm b{display:block;font-size:12px;font-weight:600;color:var(--d);
-  letter-spacing:.06em}
+.tm b{display:block;font-size:11px;font-weight:600;color:var(--d);letter-spacing:.05em}
 .tm em{display:block;font-style:normal;font-size:26px;font-weight:650;margin-top:3px;
   font-variant-numeric:tabular-nums}
 
@@ -118,8 +122,7 @@ body[data-view=setup] #reset{display:none}
 .card[data-active=true]{border-color:var(--c);background:var(--z)}
 .card[data-out=true]{opacity:.55}
 .top{display:flex;align-items:center;gap:11px}
-.top .who b{display:block;font-size:15px;font-weight:650}
-.top .who i{display:block;font-style:normal;font-size:12px;color:var(--d);margin-top:1px}
+.top b{font-size:15px;font-weight:650}
 .pts{margin-left:auto;font-size:22px;font-weight:650;font-variant-numeric:tabular-nums}
 .pts em{font-style:normal;font-size:12px;font-weight:400;color:var(--d)}
 
@@ -157,8 +160,7 @@ body[data-over=true] #banner{display:block}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:5;
   display:flex;gap:9px;max-width:520px;margin:0 auto;
   padding:11px 14px calc(11px + env(safe-area-inset-bottom));
-  background:linear-gradient(to top,var(--g) 62%,#0B121000);
-  }
+  background:linear-gradient(to top,var(--g) 62%,#0B121000)}
 body[data-view=setup] #bar{display:none}
 #bar button{padding:15px 0;border-radius:12px;font-size:13px;font-weight:650;
   letter-spacing:.12em;text-transform:uppercase}
@@ -180,32 +182,31 @@ body[data-view=setup] #bar{display:none}
 
 <!-- ===================== SETUP ===================== -->
 <section id="setup">
-  <h2>Course</h2>
-  <div class="seg" id="fmt">
-    <button data-v="9" aria-pressed="true">
-      <b>Nine wicket</b><span>16 points &middot; out, turning stake, back, home stake</span></button>
-    <button data-v="6" aria-pressed="false">
-      <b>Six wicket</b><span>13 points &middot; #1&ndash;#6, then the backs, then the stake</span></button>
+  <div class="pick">
+    <div>
+      <h2>Balls in play</h2>
+      <div id="colors">
+        <button class="cl" data-i="0" aria-pressed="true" style="--c:#2F6FE4"><span class="chip"></span>Blue</button>
+        <button class="cl" data-i="1" aria-pressed="true" style="--c:#E03A2F"><span class="chip"></span>Red</button>
+        <button class="cl" data-i="2" aria-pressed="true" style="--c:#2A3038"><span class="chip"></span>Black</button>
+        <button class="cl" data-i="3" aria-pressed="true" style="--c:#EFC01F"><span class="chip"></span>Yellow</button>
+        <button class="cl" data-i="4" aria-pressed="true" style="--c:#37B24D"><span class="chip"></span>Green</button>
+        <button class="cl" data-i="5" aria-pressed="true" style="--c:#F0812B"><span class="chip"></span>Orange</button>
+      </div>
+    </div>
+    <div>
+      <h2>Sides</h2>
+      <div id="tms">
+        <button data-v="2" aria-pressed="true">2 teams</button>
+        <button data-v="3" aria-pressed="false">3 teams</button>
+        <button data-v="0" aria-pressed="false">No teams</button>
+      </div>
+    </div>
   </div>
 
-  <h2>Balls</h2>
-  <div class="seg row" id="nballs">
-    <button data-v="4" aria-pressed="true">4 balls</button>
-    <button data-v="6" aria-pressed="false">6 balls</button>
-  </div>
-
-  <h2>Sides</h2>
-  <div class="seg row" id="mode">
-    <button data-v="partners" aria-pressed="true">Partners</button>
-    <button data-v="solo" aria-pressed="false">Cutthroat</button>
-  </div>
-
-  <h2>Players</h2>
-  <div id="names"></div>
-
-  <label class="opt" id="deadopt" hidden>
-    <span><b>Track deadness</b><i>Cleared automatically when a ball runs a wicket</i></span>
-    <input type="checkbox" id="deadchk" checked>
+  <label class="opt">
+    <span><b>Track deadness</b><i>One roquet per ball; cleared by running a wicket</i></span>
+    <input type="checkbox" id="deadchk">
   </label>
 
   <button id="start">Start game</button>
@@ -226,22 +227,18 @@ body[data-view=setup] #bar{display:none}
 
 <script>
 // ---------------------------------------------------------------------------
-// The course. One entry per point a ball can score, in the order it scores
-// them, so a ball's whole state is a single integer: how far down this list it
-// has got. Everything else on screen is derived from that.
+// The nine-wicket course: one entry per point a ball can score, in the order it
+// scores them. A ball's whole state is a single integer -- how far down this
+// list it has got -- and everything on screen is derived from that.
 // ---------------------------------------------------------------------------
-var COURSE = {
-  '6': ['#1','#2','#3','#4','#5','#6',
-        '#1-back','#2-back','#3-back','#4-back','#5-back','#6-back',
-        'Stake'],
-  '9': ['#1','#2','#3','#4','#5','#6','#7',
-        'Turning stake',
-        '#8','#9','#10','#11','#12','#13','#14',
-        'Home stake']
-};
+var COURSE = ['#1','#2','#3','#4','#5','#6','#7',
+              'Turning stake',
+              '#8','#9','#10','#11','#12','#13','#14',
+              'Home stake'];
 
-// Rotation order is the array order -- blue, red, black, yellow, green, orange
-// -- which is also the striping on the stake.
+// Rotation order is this array order -- blue, red, black, yellow, green,
+// orange -- which is also the striping on the stake. Hexes are mirrored in the
+// setup markup above.
 var META = [
   { name:'Blue',   hex:'#2F6FE4', fg:'#FFFFFF', ini:'B' },
   { name:'Red',    hex:'#E03A2F', fg:'#FFFFFF', ini:'R' },
@@ -251,14 +248,11 @@ var META = [
   { name:'Orange', hex:'#F0812B', fg:'#23120A', ini:'O' }
 ];
 
-var KEY = 'croquet.v1';
-var S = null;      // live game, or null while in setup
-var HIST = [];     // JSON snapshots, newest last
+var KEY = 'croquet.v2';   // v1 games have a different shape; let them lapse
+var S = null;             // live game, or null while in setup
+var HIST = [];            // JSON snapshots, newest last
 
 function $(id){ return document.getElementById(id); }
-function el(t){ return document.createElement(t); }
-function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
-  return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
 
 // --- persistence ----------------------------------------------------------
 // Written after every change: a phone will happily kill a backgrounded tab
@@ -278,76 +272,65 @@ function restore(){
 }
 
 // --- setup ----------------------------------------------------------------
-var setup = { fmt:'9', nballs:4, mode:'partners', deadness:true, names:{} };
+var setup = { on:[true,true,true,true,true,true], teams:2, deadness:false };
 
-function pick(group, v){
-  var wrap = $(group);
-  [].forEach.call(wrap.children, function(b){
-    b.setAttribute('aria-pressed', String(b.dataset.v === String(v)));
-  });
+function chosen(){
+  var out = [];
+  for (var i = 0; i < 6; i++) if (setup.on[i]) out.push(i);
+  return out;
 }
 
 function syncSetup(){
-  pick('fmt', setup.fmt);
-  pick('nballs', setup.nballs);
-  pick('mode', setup.mode);
+  var n = chosen().length;
 
-  // Six-wicket is a four-ball game -- there is no six-ball variant of it.
-  var six = $('nballs').children[1];
-  six.disabled = (setup.fmt === '6');
-  if (six.disabled && setup.nballs === 6) { setup.nballs = 4; pick('nballs', 4); }
+  [].forEach.call($('colors').children, function(b){
+    b.setAttribute('aria-pressed', String(setup.on[+b.dataset.i]));
+  });
 
-  // Deadness is an American six-wicket rule; it has no meaning on a
-  // nine-wicket lawn, where you get one roquet per ball per turn regardless.
-  $('deadopt').hidden = (setup.fmt !== '6');
+  // Teams have to divide the balls evenly, so an odd count rules out any split
+  // and three-way play needs the full six.
+  var allow = { '2': n >= 2 && n % 2 === 0, '3': n === 6, '0': true };
+  if (!allow[String(setup.teams)]) setup.teams = 0;
 
-  var box = $('names');
-  box.textContent = '';
-  for (var i = 0; i < setup.nballs; i++) {
-    var m = META[i];
-    var row = el('div');
-    row.className = 'nm';
-    row.style.setProperty('--c', m.hex);
-    row.innerHTML = '<span class="chip"></span>' +
-      '<input type="text" data-i="' + i + '" maxlength="18" autocomplete="off" ' +
-      'placeholder="' + m.name + '" value="' + esc(setup.names[i] || '') + '">';
-    box.appendChild(row);
-  }
+  [].forEach.call($('tms').children, function(b){
+    b.disabled = !allow[b.dataset.v];
+    b.setAttribute('aria-pressed', String(+b.dataset.v === setup.teams));
+  });
+
+  $('start').disabled = n < 2;
+  $('start').textContent = n < 2 ? 'Pick at least two balls' : 'Start game';
 }
 
-$('fmt').addEventListener('click', function(e){
+$('colors').addEventListener('click', function(e){
   var b = e.target.closest('button'); if (!b) return;
-  setup.fmt = b.dataset.v; syncSetup();
+  var i = +b.dataset.i;
+  // Never let the last two balls be switched off -- there is no game below two.
+  if (setup.on[i] && chosen().length <= 2) return;
+  setup.on[i] = !setup.on[i];
+  syncSetup();
 });
-$('nballs').addEventListener('click', function(e){
+
+$('tms').addEventListener('click', function(e){
   var b = e.target.closest('button'); if (!b || b.disabled) return;
-  setup.nballs = +b.dataset.v; syncSetup();
+  setup.teams = +b.dataset.v; syncSetup();
 });
-$('mode').addEventListener('click', function(e){
-  var b = e.target.closest('button'); if (!b) return;
-  setup.mode = b.dataset.v; syncSetup();
-});
-$('names').addEventListener('input', function(e){
-  if (e.target.dataset.i !== undefined) setup.names[e.target.dataset.i] = e.target.value;
-});
+
 $('deadchk').addEventListener('change', function(){ setup.deadness = this.checked; });
 
 $('start').addEventListener('click', function(){
-  var balls = [];
-  for (var i = 0; i < setup.nballs; i++) {
-    balls.push({ name: (setup.names[i] || '').trim(), pos: 0, out: false, dead: [] });
-  }
   S = {
-    fmt: setup.fmt,
-    partners: setup.mode === 'partners',
-    deadness: setup.fmt === '6' && setup.deadness,
-    balls: balls,
+    balls: chosen().map(function(c){
+      return { c:c, pos:0, out:false, dead:[] };
+    }),
+    teams: setup.teams,
+    deadness: setup.deadness,
     turn: 0,
     turnNo: 1,
     over: null
   };
   HIST = [];
   document.body.dataset.view = 'game';
+  document.body.dataset.over = 'false';
   render(); save();
 });
 
@@ -360,8 +343,6 @@ $('reset').addEventListener('click', function(){
 });
 
 // --- game mechanics -------------------------------------------------------
-function total(){ return COURSE[S.fmt].length; }
-
 // Every mutation goes through here, so undo needs no per-action bookkeeping --
 // it just reinstates the snapshot taken before the last thing that happened.
 function act(fn){
@@ -373,21 +354,35 @@ function act(fn){
   save();
 }
 
+// Sides are cut across the rotation, not along it: with six balls and two
+// teams that is blue/black/green against red/yellow/orange, and with three
+// teams it pairs each colour with the one furthest from it in the order.
+function teamBalls(k){
+  var out = [];
+  for (var i = k; i < S.balls.length; i += S.teams) out.push(i);
+  return out;
+}
+function teamName(k){
+  return teamBalls(k).map(function(i){ return META[S.balls[i].c].name; }).join(' & ');
+}
+function teamScore(k){
+  return teamBalls(k).reduce(function(a, i){ return a + S.balls[i].pos; }, 0);
+}
+
 function settle(){
   var n = S.balls.length, i;
 
-  // Winner: a side is finished when every one of its balls has staked out.
+  // A side is finished when every one of its balls has staked out.
   S.over = null;
-  if (S.partners) {
-    var sides = [[], []];
-    for (i = 0; i < n; i++) sides[i % 2].push(S.balls[i]);
-    for (var k = 0; k < 2; k++) {
-      if (sides[k].length && sides[k].every(function(b){ return b.out; })) {
-        S.over = sideName(k);
+  if (S.teams) {
+    for (var k = 0; k < S.teams; k++) {
+      var ids = teamBalls(k);
+      if (ids.length && ids.every(function(i){ return S.balls[i].out; })) {
+        S.over = teamName(k);
       }
     }
   } else {
-    for (i = 0; i < n; i++) if (S.balls[i].out) { S.over = ballLabel(i); break; }
+    for (i = 0; i < n; i++) if (S.balls[i].out) { S.over = META[S.balls[i].c].name; break; }
   }
   document.body.dataset.over = String(!!S.over);
 
@@ -402,15 +397,23 @@ function nextTurn(){
     if (!S.balls[j].out) { S.turn = j; S.turnNo++; return; }
   }
 }
+function upNext(){
+  var n = S.balls.length;
+  for (var k = 1; k <= n; k++) {
+    var j = (S.turn + k) % n;
+    if (!S.balls[j].out) return j;
+  }
+  return S.turn;
+}
 
 function scorePoint(i){
-  var b = S.balls[i], course = COURSE[S.fmt];
-  if (b.pos >= course.length) return;
-  var label = course[b.pos];
+  var b = S.balls[i];
+  if (b.pos >= COURSE.length) return;
+  var label = COURSE[b.pos];
   b.pos++;
   // Running a wicket clears the striker's deadness. Hitting a stake does not.
   if (S.deadness && label.charAt(0) === '#') b.dead = [];
-  if (b.pos >= course.length) b.out = true;
+  if (b.pos >= COURSE.length) b.out = true;
 }
 
 function unscore(i){
@@ -420,64 +423,49 @@ function unscore(i){
   b.out = false;
 }
 
-function sideName(k){
-  var parts = [];
-  for (var i = k; i < S.balls.length; i += 2) parts.push(META[i].name);
-  return parts.join(' & ');
-}
-function ballLabel(i){
-  return S.balls[i].name ? S.balls[i].name + ' (' + META[i].name + ')' : META[i].name;
-}
-function sideScore(k){
-  var sum = 0;
-  for (var i = k; i < S.balls.length; i += 2) sum += S.balls[i].pos;
-  return sum;
-}
-
 // --- rendering ------------------------------------------------------------
 // Six cards at most, so the whole board is rebuilt on every change rather than
 // diffed. Nothing here holds focus or scroll position that a rebuild loses.
 function render(){
   if (!S) return;
-  var course = COURSE[S.fmt], n = S.balls.length, i, j;
+  var n = S.balls.length, i, j, k;
 
-  $('sub').textContent = (S.fmt === '9' ? 'Nine wicket' : 'Six wicket') +
-                         ' · Turn ' + S.turnNo;
+  $('sub').textContent = 'Turn ' + S.turnNo;
 
   if (S.over) {
-    $('banner').innerHTML = '<b>' + esc(S.over) + ' ' +
-      (S.partners ? 'win' : 'wins') + '</b>' +
+    $('banner').innerHTML = '<b>' + S.over + ' ' + (S.teams ? 'win' : 'wins') + '</b>' +
       '<span>Undo to keep playing, or start a new game.</span>';
   }
 
   // now playing
-  var t = S.turn, m = META[t];
+  var t = S.turn, m = META[S.balls[t].c];
   var dots = '';
   for (i = 0; i < n; i++) {
     dots += '<button class="dot" data-a="turn" data-i="' + i + '"' +
-            ' style="--c:' + META[i].hex + '"' +
+            ' style="--c:' + META[S.balls[i].c].hex + '"' +
             ' data-on="' + (i === t) + '" data-out="' + S.balls[i].out + '"' +
-            ' aria-label="' + esc(ballLabel(i)) + ' to play"></button>';
+            ' aria-label="' + META[S.balls[i].c].name + ' to play"></button>';
   }
   var now = $('now');
   now.style.setProperty('--c', m.hex);
   now.innerHTML =
     '<span class="chip big"></span>' +
     '<span class="who"><b>' + m.name + ' to play</b><i>' +
-      esc(S.balls[t].name || 'for ' + (S.balls[t].out ? 'nothing' : course[S.balls[t].pos])) +
+      (S.balls[t].out ? 'staked out' : 'for ' + COURSE[S.balls[t].pos]) +
     '</i></span>' +
     '<span class="dots">' + dots + '</span>';
 
   // team totals
   var teams = $('teams');
-  if (S.partners) {
+  if (S.teams) {
     var html = '';
-    for (var k = 0; k < 2; k++) {
+    for (k = 0; k < S.teams; k++) {
       var sw = '';
-      for (i = k; i < n; i += 2) sw += '<i style="--c:' + META[i].hex + '"></i>';
+      teamBalls(k).forEach(function(i){
+        sw += '<i style="--c:' + META[S.balls[i].c].hex + '"></i>';
+      });
       html += '<div class="tm"><div class="sw">' + sw + '</div>' +
-              '<b>' + esc(sideName(k)) + '</b>' +
-              '<em>' + sideScore(k) + '</em></div>';
+              '<b>' + teamName(k) + '</b><em>' + teamScore(k) + '</em></div>';
     }
     teams.innerHTML = html;
     teams.hidden = false;
@@ -489,9 +477,9 @@ function render(){
   // ball cards
   var out = '';
   for (i = 0; i < n; i++) {
-    var b = S.balls[i], me = META[i];
-    var pct = Math.round(b.pos / course.length * 100);
-    var next = b.out ? null : course[b.pos];
+    var b = S.balls[i], me = META[b.c];
+    var pct = Math.round(b.pos / COURSE.length * 100);
+    var next = b.out ? null : COURSE[b.pos];
     var verb = !next ? '' : (next.charAt(0) === '#' ? 'Ran ' + next
                                                     : 'Hit the ' + next.toLowerCase());
 
@@ -501,9 +489,10 @@ function render(){
       for (j = 0; j < n; j++) {
         if (j === i) continue;
         chips += '<button class="dc" data-a="dead" data-i="' + i + '" data-j="' + j + '"' +
-                 ' style="--c:' + META[j].hex + ';--fg:' + META[j].fg + '"' +
+                 ' style="--c:' + META[S.balls[j].c].hex + ';--fg:' + META[S.balls[j].c].fg + '"' +
                  ' data-on="' + (b.dead.indexOf(j) >= 0) + '"' +
-                 ' aria-label="Dead on ' + META[j].name + '">' + META[j].ini + '</button>';
+                 ' aria-label="Dead on ' + META[S.balls[j].c].name + '">' +
+                 META[S.balls[j].c].ini + '</button>';
       }
       deadHtml = '<div class="dead"><span>Dead on</span>' + chips + '</div>';
     }
@@ -513,10 +502,8 @@ function render(){
         ' data-active="' + (i === S.turn) + '" data-out="' + b.out + '"' +
         ' style="--c:' + me.hex + ';--fg:' + me.fg + '">' +
       '<div class="top">' +
-        '<span class="chip"></span>' +
-        '<span class="who"><b>' + me.name + '</b>' +
-          (b.name ? '<i>' + esc(b.name) + '</i>' : '') + '</span>' +
-        '<span class="pts">' + b.pos + '<em>/' + course.length + '</em></span>' +
+        '<span class="chip"></span><b>' + me.name + '</b>' +
+        '<span class="pts">' + b.pos + '<em>/' + COURSE.length + '</em></span>' +
       '</div>' +
       '<div class="pbar"><i style="width:' + pct + '%"></i></div>' +
       '<div class="tgt">' + (b.out ? '<b>Staked out</b>'
@@ -535,10 +522,7 @@ function render(){
   $('undo').disabled = !HIST.length;
   $('next').disabled = !!S.over;
   $('next').textContent = S.over ? 'Game over'
-    : 'Next → ' + META[(function(){
-        for (var k = 1; k <= n; k++) { var j = (S.turn + k) % n; if (!S.balls[j].out) return j; }
-        return S.turn;
-      })()].name;
+                                 : 'Next → ' + META[S.balls[upNext()].c].name;
 }
 
 // --- input ----------------------------------------------------------------

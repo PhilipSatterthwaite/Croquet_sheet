@@ -3,7 +3,7 @@
 //
 // Bump CACHE whenever index.html changes -- the old cache is deleted on
 // activate, which is what makes an update actually reach an installed phone.
-var CACHE  = 'croquet-v1';
+var CACHE  = 'croquet-v2';
 var ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', function (e) {
