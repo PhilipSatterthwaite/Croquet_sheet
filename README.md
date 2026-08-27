@@ -22,22 +22,35 @@ Tap the colours to set which balls are in play — all six start lit, and you ca
 switch off any you are not using down to a minimum of two. Then pick the sides
 on the right.
 
-- **Ran #4** — scores that ball's next point and moves it along the course.
-- **−** — takes a point back.
-- **Next turn** — passes play to the next ball in the rotation, skipping any
-  that have staked out.
-- Tap any ball's card (or its dot in the top bar) to hand it the turn directly,
-  for when you are catching up two shots late.
-- **Undo** reverses the last thing that happened, whatever it was — including
-  the end of the game.
+Every ball then gets one line, so a full six-ball game sits on the screen at
+once. There is no turn order to keep up with — tap whichever ball just scored.
+
+- **Wicket 4** — the button on each row names the point that ball is playing
+  for. Tap it when the ball scores, and it rolls on to the next one. At the
+  ends of the course it reads **Turning post** and **Home post**.
+- **−** — takes that ball's last point back.
+- **Undo**, at the bottom, reverses the last thing that happened anywhere on
+  the board, whatever it was — including the end of the game.
+- The thin bar along the bottom of each row is that ball's progress round the
+  course.
 
 The game is saved to the phone after every tap, so closing the app, locking the
 screen, or getting a phone call does not lose it. **New game** clears it.
 
+### Deadness
+
+The circles on each row are the other balls in play, one each. They sit dark
+until you tap one, which lights it up: that ball is now dead on that colour.
+Running a wicket puts all of that ball's circles out again automatically —
+hitting a post does not.
+
+The marks are per row. Lighting Red on Blue's line says nothing about Red's.
+
 ### Sides
 
-Teams are cut **across** the rotation rather than along it, the way partners
-alternate on a real lawn:
+Sides decide only who wins; they have no effect on play. Teams are cut
+**across** the ball order rather than along it, the way partners alternate on a
+real lawn:
 
 | Balls | Sides | Split |
 |---|---|---|
@@ -45,23 +58,16 @@ alternate on a real lawn:
 | 6 | 3 teams | Blue·Yellow, Red·Green, Black·Orange |
 | 4 | 2 teams | 1st · 3rd vs 2nd · 4th of whatever colours are lit |
 
-A side wins when *all* of its balls have staked out. With **No teams** it is
-cutthroat and the first ball home wins.
+A side wins when *all* of its balls are home. With **No teams** it is cutthroat
+and the first ball home wins.
 
 Splits have to divide evenly, so an odd number of balls disables both team
 options, and 3 teams needs the full six. Choosing a split that a later change
 invalidates drops you back to No teams.
 
-### Deadness
-
-Off by default; flip it on at setup if you play the one-roquet-per-ball rule.
-Each card then gets a row of chips for the other balls — tap one when you are
-dead on it. Running a wicket clears that ball's deadness automatically; hitting
-a stake does not.
-
 ## The course
 
-Nine wicket, 16 points: **#1–#7, turning stake, #8–#14, home stake.**
+Nine wicket, 16 points: **wickets 1–7, turning post, wickets 8–14, home post.**
 
 It is a single list called `COURSE` at the top of the `<script>` in
 [index.html](index.html) — a ball's entire state is how far down that list it
