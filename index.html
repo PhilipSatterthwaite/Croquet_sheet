@@ -58,11 +58,13 @@ body[data-view=setup] #reset{display:none}
 .cl{display:flex;align-items:center;gap:9px;padding:11px 10px;
   border:1px solid var(--l);border-radius:12px;background:var(--s);
   color:var(--d);font-size:13px;text-align:left}
-.cl .chip{opacity:.3;box-shadow:none}
-.cl[aria-pressed=true]{background:var(--z);border-color:var(--c);color:var(--t);
-  font-weight:600}
+.cl .chip{opacity:.3;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18)}
+/* The selected ring is neutral, not the ball's own colour -- a black ring on a
+   near-black tile said nothing about whether black was in or out. */
+.cl[aria-pressed=true]{background:var(--z);color:var(--t);font-weight:600;
+  border-color:#5F7269;box-shadow:inset 0 0 0 1px #5F7269}
 .cl[aria-pressed=true] .chip{opacity:1;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 3px 10px -5px var(--c)}
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.32),0 3px 10px -5px var(--c)}
 
 #tms{display:grid;gap:8px}
 #tms button{padding:12px 6px;border:1px solid var(--l);border-radius:12px;
@@ -71,8 +73,10 @@ body[data-view=setup] #reset{display:none}
   box-shadow:inset 0 0 0 1px var(--acc)}
 #tms button[disabled]{opacity:.28;pointer-events:none}
 
+/* Every coloured surface carries a hairline of light. It is barely there on
+   the bright balls and it is the entire outline of the black one. */
 .chip{width:24px;height:24px;border-radius:50%;background:var(--c);flex:none;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 3px 10px -5px var(--c)}
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.32),0 3px 10px -5px var(--c)}
 
 #start{width:100%;margin-top:24px;padding:17px 0;border:none;border-radius:var(--r);
   background:var(--acc);color:#06210E;font-size:14px;font-weight:700;
@@ -92,28 +96,29 @@ body[data-view=setup] #reset{display:none}
 .nm{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
   white-space:nowrap;font-size:13px;font-weight:600}
 
-.dd{display:flex;gap:4px;flex:none;margin-left:auto}
-.dc{width:20px;height:20px;padding:0;border-radius:50%;border:none;
-  background:var(--c);opacity:.18;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);
+/* The circles take whatever width is left over and shrink rather than wrap, so
+   they are as large as the row allows on any handset -- they are tapped mid
+   game with one thumb, often in sunlight. */
+.dd{display:flex;gap:6px;flex:1 1 auto;justify-content:flex-end;
+  min-width:0;margin-left:8px}
+.dc{flex:0 1 38px;aspect-ratio:1;min-width:22px;padding:0;
+  border-radius:50%;border:none;background:var(--c);opacity:.26;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5);
   transition:opacity .14s,box-shadow .14s}
 .dc[data-on=true]{opacity:1;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.45),0 0 9px -2px var(--c)}
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5),0 0 9px -2px var(--c)}
 
-.go{flex:none;min-width:104px;padding:11px 10px;border:none;border-radius:10px;
-  background:var(--c);color:var(--fg);font-size:13px;font-weight:650}
+.go{flex:none;min-width:104px;padding:12px 10px;border:none;border-radius:10px;
+  background:var(--c);color:var(--fg);font-size:13px;font-weight:650;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.24)}
 .go[disabled]{background:var(--z);color:var(--d);box-shadow:inset 0 0 0 1px var(--l)}
-.back{flex:none;width:34px;height:38px;padding:0;border:1px solid var(--l);
-  border-radius:10px;background:var(--z);color:var(--d);font-size:19px;line-height:1}
-.back[disabled]{opacity:.28}
 .pb{position:absolute;left:0;bottom:0;height:3px;background:var(--c);
   transition:width .2s}
 
 /* Narrow handsets: the colour name is the first thing to go -- the chip
-   already says which ball it is. */
+   already says which ball it is, and the circles want the room. */
 @media(max-width:392px){
   .nm{display:none}
-  .dc{width:17px;height:17px}
   .go{min-width:96px;font-size:12px}
 }
 
@@ -151,12 +156,12 @@ body[data-view=setup] #bar{display:none}
     <div>
       <h2>Balls in play</h2>
       <div id="colors">
-        <button class="cl" data-i="0" aria-pressed="true" style="--c:#2F6FE4"><span class="chip"></span>Blue</button>
+        <button class="cl" data-i="0" aria-pressed="true" style="--c:#2B5FCE"><span class="chip"></span>Blue</button>
         <button class="cl" data-i="1" aria-pressed="true" style="--c:#E03A2F"><span class="chip"></span>Red</button>
-        <button class="cl" data-i="2" aria-pressed="true" style="--c:#2A3038"><span class="chip"></span>Black</button>
+        <button class="cl" data-i="2" aria-pressed="true" style="--c:#363D47"><span class="chip"></span>Black</button>
         <button class="cl" data-i="3" aria-pressed="true" style="--c:#EFC01F"><span class="chip"></span>Yellow</button>
-        <button class="cl" data-i="4" aria-pressed="true" style="--c:#37B24D"><span class="chip"></span>Green</button>
-        <button class="cl" data-i="5" aria-pressed="true" style="--c:#F0812B"><span class="chip"></span>Orange</button>
+        <button class="cl" data-i="4" aria-pressed="true" style="--c:#2E9443"><span class="chip"></span>Green</button>
+        <button class="cl" data-i="5" aria-pressed="true" style="--c:#D96A16"><span class="chip"></span>Orange</button>
       </div>
     </div>
     <div>
@@ -193,20 +198,21 @@ var COURSE = ['Wicket 1','Wicket 2','Wicket 3','Wicket 4','Wicket 5','Wicket 6',
               'Wicket 13','Wicket 14',
               'Home post'];
 
-function isWicket(label){ return label.charAt(0) === 'W'; }
-
 // Ball order -- blue, red, black, yellow, green, orange -- which is also the
 // striping on the post. Hexes are mirrored in the setup markup above.
+// Black is lifted well off true black: against this background the real thing
+// is a hole in the page, and the ring on every chip and button is what keeps
+// it reading as a ball rather than an absence.
 var META = [
-  { name:'Blue',   hex:'#2F6FE4', fg:'#FFFFFF' },
+  { name:'Blue',   hex:'#2B5FCE', fg:'#FFFFFF' },
   { name:'Red',    hex:'#E03A2F', fg:'#FFFFFF' },
-  { name:'Black',  hex:'#2A3038', fg:'#FFFFFF' },
+  { name:'Black',  hex:'#363D47', fg:'#FFFFFF' },
   { name:'Yellow', hex:'#EFC01F', fg:'#14180F' },
-  { name:'Green',  hex:'#37B24D', fg:'#06210E' },
-  { name:'Orange', hex:'#F0812B', fg:'#23120A' }
+  { name:'Green',  hex:'#2E9443', fg:'#06210E' },
+  { name:'Orange', hex:'#D96A16', fg:'#23120A' }
 ];
 
-var KEY = 'croquet.v3';   // earlier games have a different shape; let them lapse
+var KEY = 'croquet.v4';   // earlier games have a different shape; let them lapse
 var S = null;             // live game, or null while in setup
 var HIST = [];            // JSON snapshots, newest last
 
@@ -335,21 +341,15 @@ function settle(){
   document.body.dataset.over = String(!!S.over);
 }
 
+// Scoring a point -- wicket or post -- clears this ball's deadness. Nothing is
+// stashed to put it back: Undo reinstates the whole board as it stood before
+// the tap, deadness included, which is the only take-back the app has.
 function scorePoint(i){
   var b = S.balls[i];
   if (b.pos >= COURSE.length) return;
-  var label = COURSE[b.pos];
+  b.dead = [];
   b.pos++;
-  // Running a wicket clears this ball's deadness. A post does not.
-  if (isWicket(label)) b.dead = [];
   if (b.pos >= COURSE.length) b.out = true;
-}
-
-function unscore(i){
-  var b = S.balls[i];
-  if (b.pos <= 0) return;
-  b.pos--;
-  b.out = false;
 }
 
 // --- rendering ------------------------------------------------------------
@@ -388,9 +388,6 @@ function render(){
       '<button class="go" data-a="score" data-i="' + i + '"' +
         (b.out ? ' disabled' : '') + '>' +
         (b.out ? 'Finished' : COURSE[b.pos]) + '</button>' +
-      '<button class="back" data-a="back" data-i="' + i + '"' +
-        (b.pos ? '' : ' disabled') + ' aria-label="' + me.name +
-        ': take back a point">&minus;</button>' +
       '<i class="pb" style="width:' + pct + '%"></i>' +
     '</div>';
   }
@@ -406,7 +403,6 @@ $('cards').addEventListener('click', function(e){
   var i = +hit.dataset.i;
 
   if (hit.dataset.a === 'score') { act(function(){ scorePoint(i); }); return; }
-  if (hit.dataset.a === 'back')  { act(function(){ unscore(i); }); return; }
 
   if (hit.dataset.a === 'dead') {
     var j = +hit.dataset.j;
