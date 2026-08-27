@@ -34,6 +34,8 @@ once. There is no turn order to keep up with — tap whichever ball just scored.
   as far as you need.
 - The thin bar along the bottom of each row is that ball's progress round the
   course.
+- Under the rows is the **court**, with every ball sitting on the hoop it is
+  playing for. Balls sharing a hoop fan out sideways.
 
 The game is saved to the phone after every tap, so closing the app, locking the
 screen, or getting a phone call does not lose it. **New game** clears it.
@@ -77,6 +79,29 @@ It is a single list called `COURSE` at the top of the `<script>` in
 [index.html](index.html) — a ball's entire state is how far down that list it
 has got, so editing the list is all it takes to match a different set of house
 rules.
+
+### Why nine hoops carry fourteen wicket points
+
+The court is a double diamond, drawn here long-axis across so it fits under the
+rows — home post at the left, turning post at the right, two diamonds sharing
+the centre hoop:
+
+```
+                3              5
+   ●   1·14  2·13   4·11   6·9  7·8   ●
+  home                              turning
+               12             10
+```
+
+The outbound leg runs one side of each diamond and the return leg runs the
+other, so most hoops answer to two numbers — hoop `2·13` is wicket 2 on the way
+out and wicket 13 on the way home. That is what the small caption under each
+hoop means, and it is why five hoops are run twice, four once: 5×2 + 4 = 14.
+
+The layout lives in `COURT` beside `COURSE`. Each entry is an `x`/`y` fraction
+of the box plus `pts`, the course points that hoop is. Every point from 0 to 15
+must be claimed by exactly one hoop or post, or a ball would have nowhere to
+stand.
 
 ## Files
 
