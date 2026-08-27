@@ -212,31 +212,34 @@ var COURSE = ['Wicket 1','Wicket 2','Wicket 3','Wicket 4','Wicket 5','Wicket 6',
               'Home post'];
 
 // ---------------------------------------------------------------------------
-// The court, drawn long-axis across so it fits under the rows: home post at the
-// left, turning post at the right, two diamonds sharing the centre wicket.
+// The court, drawn long-axis across so it fits under the rows. Home post is at
+// the RIGHT, so the balls start on the right, run out to the turning post on
+// the left, and come back. Two diamonds share the centre hoop.
 //
 // Nine hoops carry fourteen wicket points, because the outbound leg runs one
-// side of each diamond and the return leg runs the other. So most hoops answer
-// to two numbers -- `pts` lists which points of COURSE each one is, and that is
-// what puts a ball on the right hoop and what the small caption underneath
-// says. x and y are fractions of the box.
+// side of each diamond and the return leg runs the other. `pts` lists which
+// points of COURSE each hoop is, which is what puts a ball on the right hoop.
+// The outbound-only hoops are the top row and the return-only ones the bottom
+// row, which is why a ball drawn above its hoop is always heading out and one
+// drawn below is always coming home. x and y are fractions of the box.
 // ---------------------------------------------------------------------------
 var COURT = [
-  { x:0.13, y:0.50, pts:[0, 14] },   // wicket 1 out, wicket 14 home
-  { x:0.24, y:0.50, pts:[1, 13] },
-  { x:0.37, y:0.20, pts:[2]     },   // lower diamond, outbound side
+  { x:0.87, y:0.50, pts:[0, 14] },   // wicket 1 out, wicket 14 home
+  { x:0.76, y:0.50, pts:[1, 13] },
+  { x:0.63, y:0.30, pts:[2]     },   // lower diamond, outbound side
   { x:0.50, y:0.50, pts:[3, 11] },   // centre
-  { x:0.63, y:0.20, pts:[4]     },   // upper diamond, outbound side
-  { x:0.76, y:0.50, pts:[5, 9]  },
-  { x:0.87, y:0.50, pts:[6, 8]  },
-  { x:0.63, y:0.80, pts:[10]    },   // upper diamond, return side
-  { x:0.37, y:0.80, pts:[12]    }    // lower diamond, return side
+  { x:0.37, y:0.30, pts:[4]     },   // upper diamond, outbound side
+  { x:0.24, y:0.50, pts:[5, 9]  },
+  { x:0.13, y:0.50, pts:[6, 8]  },
+  { x:0.37, y:0.70, pts:[10]    },   // upper diamond, return side
+  { x:0.63, y:0.70, pts:[12]    }    // lower diamond, return side
 ];
 var POSTS = [
-  { x:0.05, y:0.50, pts:[15], label:'home'    },
-  { x:0.95, y:0.50, pts:[7],  label:'turning' }
+  { x:0.95, y:0.50, pts:[15], label:'home'    },
+  { x:0.05, y:0.50, pts:[7],  label:'turning' }
 ];
-var BOX = { w:320, h:132 };
+var BOX = { w:320, h:176 };
+var GRID = 11.5;                     // centre-to-centre spacing of blocked balls
 
 // Ball order -- blue, red, black, yellow, green, orange -- which is also the
 // striping on the post. Hexes are mirrored in the setup markup above.
@@ -472,45 +475,51 @@ function courtSvg(){
   var c = nodeAt(COURT[5].x, COURT[5].y), d = nodeAt(POSTS[1].x, POSTS[1].y);
   s += '<path d="M' + c.x + ' ' + c.y + 'H' + d.x + '" class="rail"/>';
 
-  // posts
+  // posts. Their captions sit on the bottom edge, clear of the balls that
+  // stack below the home post at the end of a game.
   for (i = 0; i < POSTS.length; i++) {
     p = nodeAt(POSTS[i].x, POSTS[i].y);
+    // Centring the caption on the post would hang it off the edge, so each one
+    // is anchored to the side of the box its post stands on.
+    var right = POSTS[i].x > 0.5;
     s += '<rect x="' + n1(p.x - 2) + '" y="' + n1(p.y - 9) + '" width="4" height="18"' +
          ' rx="2" class="pegm"/>' +
-         '<text x="' + p.x + '" y="' + n1(p.y + 21) + '" class="wn">' +
+         '<text x="' + (right ? BOX.w - 7 : 7) + '" y="' + (BOX.h - 5) +
+         '" class="wn" style="text-anchor:' + (right ? 'end' : 'start') + '">' +
          POSTS[i].label + '</text>';
   }
 
-  // hoops, captioned with the point numbers each one answers to
+  // hoops
   for (i = 0; i < COURT.length; i++) {
     p = nodeAt(COURT[i].x, COURT[i].y);
     s += '<path d="M' + n1(p.x - 7) + ' ' + n1(p.y + 6) +
-         'v-4a7 7 0 0 1 14 0v4" class="wk"/>' +
-         '<text x="' + p.x + '" y="' + n1(p.y + 18) + '" class="wn">' +
-         COURT[i].pts.map(function(k){ return COURSE[k].replace('Wicket ', ''); })
-                     .join('·') + '</text>';
+         'v-4a7 7 0 0 1 14 0v4" class="wk"/>';
   }
 
-  // balls, sitting above the point they are playing for. Balls sharing a hoop
-  // fan out sideways rather than stacking invisibly on top of one another.
+  // Balls, blocked two abreast and up to three deep so a crowd stays compact:
+  // above their hoop while they are heading out, below it on the way home. A
+  // hoop that serves both legs therefore carries two separate blocks.
   var groups = {};
   for (i = 0; i < S.balls.length; i++) {
-    var n = nodeFor(S.balls[i].out ? 15 : S.balls[i].pos);
+    var b = S.balls[i];
+    var pt = b.out ? 15 : b.pos;
+    var n = nodeFor(pt);
     if (!n) continue;
-    var key = n.x + ':' + n.y;
-    (groups[key] = groups[key] || { n:n, ids:[] }).ids.push(i);
+    var up = !b.out && pt <= 7;                 // 0..7 is the outbound leg
+    var key = n.x + ':' + n.y + ':' + up;
+    (groups[key] = groups[key] || { n:n, up:up, ids:[] }).ids.push(i);
   }
   Object.keys(groups).forEach(function(key){
     var g = groups[key], q = nodeAt(g.n.x, g.n.y), k = g.ids.length;
-    // The posts sit near the ends, where a full fan of six would run off the
-    // edge, so the fan is nudged back inside rather than clipped.
-    var half = (k - 1) / 2 * 13;
-    var cx = Math.min(Math.max(q.x, 8 + half), BOX.w - 8 - half);
+    var rows = Math.ceil(k / 2), cols = Math.min(k, 2);
+    // 13px clears the arch; rows grow away from the hoop in both directions.
+    var top = g.up ? q.y - 13 - (rows - 1) * GRID : q.y + 13;
     g.ids.forEach(function(id, idx){
       var m = META[S.balls[id].c];
-      var dx = (idx - (k - 1) / 2) * 13;
-      s += '<circle cx="' + n1(cx + dx) + '" cy="' + n1(q.y - 15) +
-           '" r="5.5" fill="' + m.hex + '" stroke="' + m.ring + '"' +
+      var dx = (idx % 2 - (cols - 1) / 2) * GRID;
+      var dy = Math.floor(idx / 2) * GRID;
+      s += '<circle cx="' + n1(q.x + dx) + '" cy="' + n1(top + dy) +
+           '" r="5" fill="' + m.hex + '" stroke="' + m.ring + '"' +
            ' class="bm" data-out="' + S.balls[id].out + '"/>';
     });
   });

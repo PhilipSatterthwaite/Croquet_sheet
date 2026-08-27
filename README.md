@@ -35,7 +35,8 @@ once. There is no turn order to keep up with — tap whichever ball just scored.
 - The thin bar along the bottom of each row is that ball's progress round the
   course.
 - Under the rows is the **court**, with every ball sitting on the hoop it is
-  playing for. Balls sharing a hoop fan out sideways.
+  playing for — **above** the hoop while it is heading out, **below** it on the
+  way home. Balls sharing a hoop block up two abreast.
 
 The game is saved to the phone after every tap, so closing the app, locking the
 screen, or getting a phone call does not lose it. **New game** clears it.
@@ -82,21 +83,27 @@ rules.
 
 ### Why nine hoops carry fourteen wicket points
 
-The court is a double diamond, drawn here long-axis across so it fits under the
-rows — home post at the left, turning post at the right, two diamonds sharing
-the centre hoop:
+The court is a double diamond, drawn long-axis across so it fits under the
+rows. **Home is on the right**, where the balls start; they run out to the
+left and come back. Two diamonds share the centre hoop:
 
 ```
-                3              5
-   ●   1·14  2·13   4·11   6·9  7·8   ●
-  home                              turning
-               12             10
+                5              3
+   ●    6·9   4·11    2·13   1·14    ●
+turning                             home
+               10             12
 ```
 
 The outbound leg runs one side of each diamond and the return leg runs the
 other, so most hoops answer to two numbers — hoop `2·13` is wicket 2 on the way
-out and wicket 13 on the way home. That is what the small caption under each
-hoop means, and it is why five hoops are run twice, four once: 5×2 + 4 = 14.
+out and wicket 13 on the way home. That is why five hoops are run twice and
+four once: 5×2 + 4 = 14.
+
+Those numbers are *not* drawn on the diagram — the position of a ball says
+which leg it is on. Outbound-only hoops are the top row and return-only hoops
+the bottom row, and each ball sits above its hoop going out, below it coming
+home. So a hoop that serves both legs can carry two separate blocks of balls at
+once, one above and one below.
 
 The layout lives in `COURT` beside `COURSE`. Each entry is an `x`/`y` fraction
 of the box plus `pts`, the course points that hoop is. Every point from 0 to 15
