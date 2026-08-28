@@ -134,13 +134,18 @@ Each ball in `META` carries three colours:
 | | |
 |---|---|
 | `hex` | the fill — the block, the progress bar, the arrow button, the dot on the court. All the same flat colour, no shading between them |
-| `fg` | the count and the arrow drawn *on* that fill, so it must clear 4.5:1 against `hex`. White on four balls, near-black on yellow and orange, where white cannot be read |
+| `fg` | the arrow drawn *on* that fill, so it must clear 4.5:1 against `hex`. White on four balls, near-black on yellow and orange |
 | `ring` | the edge, and it must be **darker** than `hex`. Only the deadness dots and the court markers use it now |
 
 The edge rule is the one worth remembering. On a dark background an edge has to
 be lighter than its ball; on this one it has to be darker, because the colour
 that struggles against white is yellow, not black. Yellow's fill is only 1.7:1
 against a card — the `#8A6C05` edge at 5:1 is what holds its shape.
+
+The count on the block is the exception: it is white on **all six** balls, and
+carries a dark halo to pay for it. Plain white measures 1.7:1 on yellow and
+3.4:1 on orange, so one flat rule for every ball only works if the numeral
+brings its own contrast.
 
 The test suite measures all of this rather than trusting the eye: every `fg`
 against its `hex`, every `ring` against a card, and every text token against

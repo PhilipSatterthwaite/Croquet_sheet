@@ -104,10 +104,14 @@ body[data-view=setup] #reset{display:none}
    reaches both inner edges, and the card's overflow rounds its outer corners.
    It carries the count of points scored: 1 after the first wicket, 8 after the
    turning post, 16 when the ball is home. */
+/* The count is white on every ball. Plain white on yellow is 1.7:1 and cannot
+   be read, so the numeral carries a dark halo -- that keeps one rule for all
+   six rather than flipping to dark text on the two light balls. */
 .sw{flex:none;width:var(--swW);align-self:stretch;margin:-7px 0;
-  background:var(--c);color:var(--fg);
+  background:var(--c);color:#FFFFFF;
+  text-shadow:0 1px 1px rgba(0,0,0,.45),0 0 4px rgba(0,0,0,.5);
   display:grid;place-items:center;
-  font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
 
 /* The circles take whatever width is left over and shrink rather than wrap, so
    they are as large as the row allows on any handset -- they are tapped mid
@@ -160,7 +164,7 @@ body[data-view=setup] #reset{display:none}
 .pegm{fill:#6B6355}
 .wn{fill:#6B6355;font-size:8px;font-weight:600;text-anchor:middle;
   font-family:ui-sans-serif,system-ui,sans-serif}
-.bm{stroke-width:2}
+.bm{stroke-width:.75}
 
 /* ---- winner ---- */
 #banner{display:none;margin:14px 0;padding:14px 16px;border-radius:var(--r);
@@ -201,7 +205,7 @@ body[data-view=setup] #bar{display:none}
         <button class="cl" data-i="2" aria-pressed="true" style="--c:#363D47;--ring:#10141A"><span class="chip"></span>Black</button>
         <button class="cl" data-i="3" aria-pressed="true" style="--c:#EFC01F;--ring:#8A6C05"><span class="chip"></span>Yellow</button>
         <button class="cl" data-i="4" aria-pressed="true" style="--c:#1F6633;--ring:#0D3A1B"><span class="chip"></span>Green</button>
-        <button class="cl" data-i="5" aria-pressed="true" style="--c:#C96311;--ring:#7A3A05"><span class="chip"></span>Orange</button>
+        <button class="cl" data-i="5" aria-pressed="true" style="--c:#DB6E0E;--ring:#7A3A05"><span class="chip"></span>Orange</button>
       </div>
     </div>
     <div>
@@ -282,7 +286,7 @@ var META = [
   { name:'Black',  hex:'#363D47', fg:'#FFFFFF', ring:'#10141A' },
   { name:'Yellow', hex:'#EFC01F', fg:'#14180F', ring:'#8A6C05' },
   { name:'Green',  hex:'#1F6633', fg:'#FFFFFF', ring:'#0D3A1B' },
-  { name:'Orange', hex:'#C96311', fg:'#23120A', ring:'#7A3A05' }
+  { name:'Orange', hex:'#DB6E0E', fg:'#23120A', ring:'#7A3A05' }
 ];
 
 var KEY = 'croquet.v5';   // earlier games have a different shape; let them lapse
