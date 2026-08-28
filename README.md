@@ -39,7 +39,8 @@ of each one, and the court below says where every ball is:
   course.
 - Under the rows is the **court**, with every ball sitting on the hoop it is
   playing for — **above** the hoop while it is heading out, **below** it on the
-  way home. Balls sharing a hoop block up two abreast.
+  way home. Balls sharing a hoop block up two abreast, and a ball comes off the
+  court once it is home.
 
 The game is saved to the phone after every tap, so closing the app, locking the
 screen, or getting a phone call does not lose it. **New game** clears it.
@@ -47,12 +48,11 @@ screen, or getting a phone call does not lose it. **New game** clears it.
 ### Deadness
 
 The circles on each row are the other balls in play, one each. A live one is a
-small plain dot; tap it and it swells and takes a bright white collar, meaning
-that ball is now dead on that colour.
+small dull dot; tap it and it swells to more than twice the size in full
+colour, meaning that ball is now dead on that colour.
 
-Both states are full-strength colour — the difference is size and outline, not
-brightness, so you can always tell *which* ball a circle stands for as well as
-whether it is dead. The tap target stays the same size either way.
+Size does the work, so the two states separate at a glance from arm's length.
+The tap target stays a full 38px either way — only the dot inside it changes.
 
 Scoring any point — wicket or post — puts all of that ball's circles back to
 dots automatically.

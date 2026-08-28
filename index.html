@@ -105,20 +105,18 @@ body[data-view=setup] #reset{display:none}
    they are as large as the row allows on any handset -- they are tapped mid
    game with one thumb, often in sunlight. */
 .dd{display:flex;gap:6px;flex:1 1 auto;justify-content:flex-end;min-width:0}
-/* Alive and dead differ in size and outline, not in how dim they are: fading
-   the colour made it hard to tell which ball a circle even was. Both states
-   are full strength; a live ball is a small plain dot, a dead one swells and
-   takes a bright collar. The button keeps its full footprint either way, so
-   the tap target never changes. */
+/* Size carries the whole signal: a live ball is a small dull dot that recedes,
+   a dead one is a full-strength disc more than twice across. The button keeps
+   its 38px footprint in either state, so the tap target never changes. */
 .dc{flex:0 1 38px;aspect-ratio:1;min-width:22px;padding:0;
   border:none;background:none;border-radius:50%;
   display:grid;place-items:center}
 .dc::before{content:'';width:100%;height:100%;border-radius:50%;
-  background:var(--c);transform:scale(.56);
-  box-shadow:0 0 0 1.5px var(--ring);
-  transition:transform .14s,box-shadow .14s}
-.dc[data-on=true]::before{transform:scale(.78);
-  box-shadow:0 0 0 2.5px var(--t),0 0 12px -2px var(--c)}
+  background:var(--c);transform:scale(.40);opacity:.55;
+  box-shadow:0 0 0 1px var(--ring);
+  transition:transform .14s,opacity .14s,box-shadow .14s}
+.dc[data-on=true]::before{transform:scale(.92);opacity:1;
+  box-shadow:0 0 12px -2px var(--c)}
 
 .go,.back{flex:none;height:40px;padding:0;border-radius:10px;
   font-size:20px;line-height:1}
@@ -152,7 +150,6 @@ body[data-view=setup] #reset{display:none}
 .wn{fill:#67786F;font-size:8px;font-weight:600;text-anchor:middle;
   font-family:ui-sans-serif,system-ui,sans-serif}
 .bm{stroke-width:2}
-.bm[data-out=true]{opacity:.35}
 
 /* ---- winner ---- */
 #banner{display:none;margin:14px 0;padding:14px 16px;border-radius:var(--r);
@@ -540,10 +537,10 @@ function courtSvg(){
   var groups = {};
   for (i = 0; i < S.balls.length; i++) {
     var b = S.balls[i];
-    var pt = b.out ? 15 : b.pos;
-    var n = nodeFor(pt);
+    if (b.out) continue;                        // finished balls leave the court
+    var n = nodeFor(b.pos);
     if (!n) continue;
-    var up = !b.out && pt <= 7;                 // 0..7 is the outbound leg
+    var up = b.pos <= 7;                        // 0..7 is the outbound leg
     var key = n.x + ':' + n.y + ':' + up;
     (groups[key] = groups[key] || { n:n, up:up, ids:[] }).ids.push(i);
   }
@@ -557,8 +554,7 @@ function courtSvg(){
       var dx = (idx % 2 - (cols - 1) / 2) * GRID;
       var dy = Math.floor(idx / 2) * GRID;
       s += '<circle cx="' + n1(q.x + dx) + '" cy="' + n1(top + dy) +
-           '" r="5" fill="' + m.hex + '" stroke="' + m.ring + '"' +
-           ' class="bm" data-out="' + S.balls[id].out + '"/>';
+           '" r="5" fill="' + m.hex + '" stroke="' + m.ring + '" class="bm"/>';
     });
   });
 
