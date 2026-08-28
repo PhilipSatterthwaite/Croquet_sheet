@@ -46,10 +46,16 @@ screen, or getting a phone call does not lose it. **New game** clears it.
 
 ### Deadness
 
-The circles on each row are the other balls in play, one each. They sit dark
-until you tap one, which lights it up: that ball is now dead on that colour.
-Scoring any point — wicket or post — puts all of that ball's circles out again
-automatically.
+The circles on each row are the other balls in play, one each. A live one is a
+small plain dot; tap it and it swells and takes a bright white collar, meaning
+that ball is now dead on that colour.
+
+Both states are full-strength colour — the difference is size and outline, not
+brightness, so you can always tell *which* ball a circle stands for as well as
+whether it is dead. The tap target stays the same size either way.
+
+Scoring any point — wicket or post — puts all of that ball's circles back to
+dots automatically.
 
 **−** rewinds both together: the ball goes back a point and its circles return
 to exactly what they were before it scored. Marks made *after* the point are
