@@ -120,6 +120,30 @@ of the box plus `pts`, the course points that hoop is. Every point from 0 to 15
 must be claimed by exactly one hoop or post, or a ball would have nowhere to
 stand.
 
+## Colour
+
+The app runs on a light ground — a very pale grey page with white cards. That
+is what gives the black ball its contrast: as a block of `#363D47` on white it
+sits at about 11:1, where on the old dark background it was a hole in the page.
+
+Each ball in `META` carries three colours:
+
+| | |
+|---|---|
+| `hex` | the fill — the block, the arrow button, the dot on the court |
+| `fg` | text drawn *on* that fill, so it must clear 4.5:1 against `hex` |
+| `ring` | the edge, and it must be **darker** than `hex` |
+
+The edge rule is the one worth remembering. On a dark background an edge has to
+be lighter than its ball; on this one it has to be darker, because the colour
+that struggles against white is yellow, not black. Yellow's fill is only 1.7:1
+against a card — the `#8A6C05` edge at 5:1 is what holds its shape.
+
+The test suite measures all of this rather than trusting the eye: every `fg`
+against its `hex`, every `ring` against a card, and every text token against
+its background. Darkening red from `#E03A2F` to `#D9342A` came out of that
+check — white on the old red was 4.4:1.
+
 ## Files
 
 | | |

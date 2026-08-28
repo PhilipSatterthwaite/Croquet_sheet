@@ -4,20 +4,24 @@
 <meta charset="utf-8">
 <title>Croquet</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0B1210">
+<meta name="theme-color" content="#EDF0EC">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- "default" keeps the status bar dark-on-light, which the light ground needs. -->
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Croquet">
 <!-- Only takes effect over http(s); a file:// page cannot be installed. -->
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230B1210'/%3E%3Cpath d='M56 136V97a34 34 0 0 1 68 0v39' fill='none' stroke='%23E9F0EB' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='117' r='19' fill='%23E03A2F'/%3E%3Crect x='37' y='142' width='106' height='7' rx='3.5' fill='%2337B24D'/%3E%3C/svg%3E">
 
 <style>
+/* Light ground. The black ball spent three redesigns disappearing into a dark
+   background; against a white card it needs no help at all, and every other
+   ball reads at least as well. --g is the page, --s the cards that lift off it. */
 :root{
-  --g:#0B1210; --s:#141C19; --z:#1D2723; --l:#2B3833;
-  --t:#E9F0EB; --d:#7F9089; --r:15px;
-  --acc:#4ADE80;
+  --g:#EDF0EC; --s:#FFFFFF; --z:#E3E9E4; --l:#CBD4CD;
+  --t:#12201A; --d:#5C6F66; --r:15px;
+  --acc:#1E7A45;
   --swW:46px;              /* the colour block down the left of each row */
 }
 *{box-sizing:border-box}
@@ -63,7 +67,7 @@ body[data-view=setup] #reset{display:none}
 /* The selected ring is neutral, not the ball's own colour -- a black ring on a
    near-black tile said nothing about whether black was in or out. */
 .cl[aria-pressed=true]{background:var(--z);color:var(--t);font-weight:600;
-  border-color:#5F7269;box-shadow:inset 0 0 0 1px #5F7269}
+  border-color:#7C8F84;box-shadow:inset 0 0 0 1px #7C8F84}
 .cl[aria-pressed=true] .chip{opacity:1;
   box-shadow:inset 0 0 0 2px var(--ring),0 3px 10px -5px var(--c)}
 
@@ -80,7 +84,7 @@ body[data-view=setup] #reset{display:none}
   box-shadow:inset 0 0 0 2px var(--ring),0 3px 10px -5px var(--c)}
 
 #start{width:100%;margin-top:24px;padding:17px 0;border:none;border-radius:var(--r);
-  background:var(--acc);color:#06210E;font-size:14px;font-weight:700;
+  background:var(--acc);color:#FFFFFF;font-size:14px;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase}
 #start[disabled]{background:var(--z);color:var(--d);
   box-shadow:inset 0 0 0 1px var(--l);pointer-events:none}
@@ -115,8 +119,10 @@ body[data-view=setup] #reset{display:none}
   background:var(--c);transform:scale(.40);opacity:.55;
   box-shadow:0 0 0 1px var(--ring);
   transition:transform .14s,opacity .14s,box-shadow .14s}
+/* A coloured glow does nothing on a white card, so the dead dot lifts off it
+   with a soft drop shadow instead. */
 .dc[data-on=true]::before{transform:scale(.92);opacity:1;
-  box-shadow:0 0 12px -2px var(--c)}
+  box-shadow:0 2px 6px -2px rgba(0,0,0,.4)}
 
 .go,.back{flex:none;height:40px;padding:0;border-radius:10px;
   font-size:20px;line-height:1}
@@ -144,16 +150,16 @@ body[data-view=setup] #reset{display:none}
 #court{margin-top:12px;background:var(--s);border:1px solid var(--l);
   border-radius:var(--r);padding:8px 6px 6px}
 #court svg{display:block;width:100%;height:auto}
-.wk{fill:none;stroke:#5B6E64;stroke-width:3.4;stroke-linecap:round}
-.rail{fill:none;stroke:#25322C;stroke-width:2}
-.pegm{fill:#8C9A92}
-.wn{fill:#67786F;font-size:8px;font-weight:600;text-anchor:middle;
+.wk{fill:none;stroke:#7E9188;stroke-width:3.4;stroke-linecap:round}
+.rail{fill:none;stroke:#D3DAD4;stroke-width:2}
+.pegm{fill:#5C6F66}
+.wn{fill:#5C6F66;font-size:8px;font-weight:600;text-anchor:middle;
   font-family:ui-sans-serif,system-ui,sans-serif}
 .bm{stroke-width:2}
 
 /* ---- winner ---- */
 #banner{display:none;margin:14px 0;padding:14px 16px;border-radius:var(--r);
-  background:#12301C;border:1px solid #2E6B45;color:#9BE8B6}
+  background:#DDF2E3;border:1px solid #8FC7A2;color:#14572F}
 #banner b{display:block;font-size:17px;font-weight:650;margin-bottom:2px}
 #banner span{font-size:13px;opacity:.85}
 body[data-over=true] #banner{display:block}
@@ -162,7 +168,7 @@ body[data-over=true] #banner{display:block}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:5;
   display:flex;max-width:520px;margin:0 auto;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-  background:linear-gradient(to top,var(--g) 62%,#0B121000)}
+  background:linear-gradient(to top,var(--g) 62%,#EDF0EC00)}
 body[data-view=setup] #bar{display:none}
 #undo{flex:1;padding:15px 0;border:1px solid var(--l);border-radius:12px;
   background:var(--z);color:var(--t);font-size:13px;font-weight:650;
@@ -185,12 +191,12 @@ body[data-view=setup] #bar{display:none}
     <div>
       <h2>Balls in play</h2>
       <div id="colors">
-        <button class="cl" data-i="0" aria-pressed="true" style="--c:#2B5FCE;--ring:#6A93E8"><span class="chip"></span>Blue</button>
-        <button class="cl" data-i="1" aria-pressed="true" style="--c:#E03A2F;--ring:#F0857C"><span class="chip"></span>Red</button>
-        <button class="cl" data-i="2" aria-pressed="true" style="--c:#363D47;--ring:#818E9F"><span class="chip"></span>Black</button>
-        <button class="cl" data-i="3" aria-pressed="true" style="--c:#EFC01F;--ring:#F7DC77"><span class="chip"></span>Yellow</button>
-        <button class="cl" data-i="4" aria-pressed="true" style="--c:#1F6633;--ring:#4E9A69"><span class="chip"></span>Green</button>
-        <button class="cl" data-i="5" aria-pressed="true" style="--c:#C96311;--ring:#E9A063"><span class="chip"></span>Orange</button>
+        <button class="cl" data-i="0" aria-pressed="true" style="--c:#2B5FCE;--ring:#16357C"><span class="chip"></span>Blue</button>
+        <button class="cl" data-i="1" aria-pressed="true" style="--c:#D9342A;--ring:#94201A"><span class="chip"></span>Red</button>
+        <button class="cl" data-i="2" aria-pressed="true" style="--c:#363D47;--ring:#10141A"><span class="chip"></span>Black</button>
+        <button class="cl" data-i="3" aria-pressed="true" style="--c:#EFC01F;--ring:#8A6C05"><span class="chip"></span>Yellow</button>
+        <button class="cl" data-i="4" aria-pressed="true" style="--c:#1F6633;--ring:#0D3A1B"><span class="chip"></span>Green</button>
+        <button class="cl" data-i="5" aria-pressed="true" style="--c:#C96311;--ring:#7A3A05"><span class="chip"></span>Orange</button>
       </div>
     </div>
     <div>
@@ -260,17 +266,17 @@ var GRID = 11.5;                     // centre-to-centre spacing of blocked ball
 
 // Ball order -- blue, red, black, yellow, green, orange -- which is also the
 // striping on the post. Hexes are mirrored in the setup markup above.
-// Each ball carries three colours: the fill, the text that sits on it, and a
-// lighter edge. The edge is what makes black a ball rather than a hole in the
-// page -- on the bright colours it reads as a highlight and does no harm, so
-// every ball is drawn the same way rather than special-casing one.
+// Each ball carries three colours: the fill, the text that sits on it, and an
+// edge. The edge is a DARKER shade of the ball -- on a light ground the colour
+// that needs help separating is yellow, not black, and a lighter rim would
+// have made yellow worse. Same rule for all six rather than special-casing.
 var META = [
-  { name:'Blue',   hex:'#2B5FCE', fg:'#FFFFFF', ring:'#6A93E8' },
-  { name:'Red',    hex:'#E03A2F', fg:'#FFFFFF', ring:'#F0857C' },
-  { name:'Black',  hex:'#363D47', fg:'#FFFFFF', ring:'#818E9F' },
-  { name:'Yellow', hex:'#EFC01F', fg:'#14180F', ring:'#F7DC77' },
-  { name:'Green',  hex:'#1F6633', fg:'#FFFFFF', ring:'#4E9A69' },
-  { name:'Orange', hex:'#C96311', fg:'#23120A', ring:'#E9A063' }
+  { name:'Blue',   hex:'#2B5FCE', fg:'#FFFFFF', ring:'#16357C' },
+  { name:'Red',    hex:'#D9342A', fg:'#FFFFFF', ring:'#94201A' },
+  { name:'Black',  hex:'#363D47', fg:'#FFFFFF', ring:'#10141A' },
+  { name:'Yellow', hex:'#EFC01F', fg:'#14180F', ring:'#8A6C05' },
+  { name:'Green',  hex:'#1F6633', fg:'#FFFFFF', ring:'#0D3A1B' },
+  { name:'Orange', hex:'#C96311', fg:'#23120A', ring:'#7A3A05' }
 ];
 
 var KEY = 'croquet.v5';   // earlier games have a different shape; let them lapse
