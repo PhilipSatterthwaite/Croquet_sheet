@@ -101,9 +101,13 @@ body[data-view=setup] #reset{display:none}
 
 /* The ball's colour is the whole left edge of the row rather than a token
    sitting on it. Negative margins pull it past the row's own padding so it
-   reaches both inner edges, and the card's overflow rounds its outer corners. */
+   reaches both inner edges, and the card's overflow rounds its outer corners.
+   It carries the count of points scored: 1 after the first wicket, 8 after the
+   turning post, 16 when the ball is home. */
 .sw{flex:none;width:var(--swW);align-self:stretch;margin:-7px 0;
-  background:var(--c);box-shadow:inset -2px 0 0 var(--ring)}
+  background:var(--c);color:var(--fg);
+  display:grid;place-items:center;
+  font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
 
 /* The circles take whatever width is left over and shrink rather than wrap, so
    they are as large as the row allows on any handset -- they are tapped mid
@@ -126,14 +130,15 @@ body[data-view=setup] #reset{display:none}
 
 .go,.back{flex:none;height:40px;padding:0;border-radius:10px;
   font-size:20px;line-height:1}
-.go{width:58px;border:none;background:var(--c);color:var(--fg);
-  box-shadow:inset 0 0 0 1.5px var(--ring)}
+.go{width:58px;border:none;background:var(--c);color:var(--fg)}
 .go[disabled]{background:var(--z);color:var(--d);box-shadow:inset 0 0 0 1px var(--l)}
 .back{width:44px;border:1px solid var(--l);background:var(--z);color:var(--d)}
 .back[disabled]{opacity:.28}
 
-/* Progress starts where the colour block ends, so it does not paint over it. */
-.pb{position:absolute;left:var(--swW);bottom:0;height:3px;background:var(--ring);
+/* Progress starts where the colour block ends, so it does not paint over it.
+   Block, bar and arrow are all the plain ball colour -- no edges, no darker
+   shade -- so the three read as one piece of the same material. */
+.pb{position:absolute;left:var(--swW);bottom:0;height:5px;background:var(--c);
   transition:width .2s}
 
 /* Narrow handsets: everything gives up a little so the circles stay tappable. */
@@ -464,8 +469,8 @@ function render(){
     // The labels carry the wording for anyone not going by sight.
     out +=
     '<div class="card" data-out="' + b.out + '"' +
-        ' style="--c:' + me.hex + ';--fg:' + me.fg + ';--ring:' + me.ring + '">' +
-      '<span class="sw"></span>' +
+        ' style="--c:' + me.hex + ';--fg:' + me.fg + '">' +
+      '<span class="sw">' + b.pos + '</span>' +
       '<span class="dd">' + chips + '</span>' +
       '<button class="go" data-a="score" data-i="' + i + '"' +
         (b.out ? ' disabled' : '') + ' aria-label="' + me.name + ': ' +

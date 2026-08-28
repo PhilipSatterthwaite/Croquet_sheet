@@ -26,7 +26,9 @@ Every ball then gets one line, so a full six-ball game sits on the screen at
 once. There is no turn order to keep up with — tap whichever ball just scored.
 
 The rows carry no words at all. A block of the ball's colour runs down the left
-of each one, and the court below says where every ball is:
+of each one, carrying its **count of points scored** — 1 after the first
+wicket, 8 after the turning post, 16 when it is home. The court below says
+where every ball is:
 
 - **→** scores that ball's next point and moves it along the course. It turns
   into a **✓** when the ball is home.
@@ -131,9 +133,9 @@ Each ball in `META` carries three colours:
 
 | | |
 |---|---|
-| `hex` | the fill — the block, the arrow button, the dot on the court |
-| `fg` | text drawn *on* that fill, so it must clear 4.5:1 against `hex` |
-| `ring` | the edge, and it must be **darker** than `hex` |
+| `hex` | the fill — the block, the progress bar, the arrow button, the dot on the court. All the same flat colour, no shading between them |
+| `fg` | the count and the arrow drawn *on* that fill, so it must clear 4.5:1 against `hex`. White on four balls, near-black on yellow and orange, where white cannot be read |
+| `ring` | the edge, and it must be **darker** than `hex`. Only the deadness dots and the court markers use it now |
 
 The edge rule is the one worth remembering. On a dark background an edge has to
 be lighter than its ball; on this one it has to be darker, because the colour
