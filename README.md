@@ -122,9 +122,10 @@ stand.
 
 ## Colour
 
-The app runs on a light ground — a very pale grey page with white cards. That
-is what gives the black ball its contrast: as a block of `#363D47` on white it
+The app runs on a light ground — a soft beige page with near-white cards. That
+is what gives the black ball its contrast: as a block of `#363D47` on a card it
 sits at about 11:1, where on the old dark background it was a hole in the page.
+Every neutral is warm, so the greys never turn blue against the beige.
 
 Each ball in `META` carries three colours:
 

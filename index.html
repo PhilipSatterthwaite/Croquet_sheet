@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Croquet</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#EDF0EC">
+<meta name="theme-color" content="#E7E2D7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <!-- "default" keeps the status bar dark-on-light, which the light ground needs. -->
@@ -19,8 +19,8 @@
    background; against a white card it needs no help at all, and every other
    ball reads at least as well. --g is the page, --s the cards that lift off it. */
 :root{
-  --g:#EDF0EC; --s:#FFFFFF; --z:#E3E9E4; --l:#CBD4CD;
-  --t:#12201A; --d:#5C6F66; --r:15px;
+  --g:#E7E2D7; --s:#FCFAF6; --z:#DCD5C7; --l:#C7BFAE;
+  --t:#201C14; --d:#6B6355; --r:15px;
   --acc:#1E7A45;
   --swW:46px;              /* the colour block down the left of each row */
 }
@@ -67,7 +67,7 @@ body[data-view=setup] #reset{display:none}
 /* The selected ring is neutral, not the ball's own colour -- a black ring on a
    near-black tile said nothing about whether black was in or out. */
 .cl[aria-pressed=true]{background:var(--z);color:var(--t);font-weight:600;
-  border-color:#7C8F84;box-shadow:inset 0 0 0 1px #7C8F84}
+  border-color:#8A8172;box-shadow:inset 0 0 0 1px #8A8172}
 .cl[aria-pressed=true] .chip{opacity:1;
   box-shadow:inset 0 0 0 2px var(--ring),0 3px 10px -5px var(--c)}
 
@@ -150,10 +150,10 @@ body[data-view=setup] #reset{display:none}
 #court{margin-top:12px;background:var(--s);border:1px solid var(--l);
   border-radius:var(--r);padding:8px 6px 6px}
 #court svg{display:block;width:100%;height:auto}
-.wk{fill:none;stroke:#7E9188;stroke-width:3.4;stroke-linecap:round}
-.rail{fill:none;stroke:#D3DAD4;stroke-width:2}
-.pegm{fill:#5C6F66}
-.wn{fill:#5C6F66;font-size:8px;font-weight:600;text-anchor:middle;
+.wk{fill:none;stroke:#8A8172;stroke-width:3.4;stroke-linecap:round}
+.rail{fill:none;stroke:#DED7C8;stroke-width:2}
+.pegm{fill:#6B6355}
+.wn{fill:#6B6355;font-size:8px;font-weight:600;text-anchor:middle;
   font-family:ui-sans-serif,system-ui,sans-serif}
 .bm{stroke-width:2}
 
@@ -168,7 +168,7 @@ body[data-over=true] #banner{display:block}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:5;
   display:flex;max-width:520px;margin:0 auto;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-  background:linear-gradient(to top,var(--g) 62%,#EDF0EC00)}
+  background:linear-gradient(to top,var(--g) 62%,#E7E2D700)}
 body[data-view=setup] #bar{display:none}
 #undo{flex:1;padding:15px 0;border:1px solid var(--l);border-radius:12px;
   background:var(--z);color:var(--t);font-size:13px;font-weight:650;
@@ -262,7 +262,8 @@ var POSTS = [
   { x:0.05, y:0.50, pts:[7],  label:'turning' }
 ];
 var BOX = { w:320, h:176 };
-var GRID = 11.5;                     // centre-to-centre spacing of blocked balls
+var GRID = 11.5;   // centre-to-centre spacing of blocked balls
+var GAP  = 17;     // hoop centre to nearest ball centre, so they do not touch
 
 // Ball order -- blue, red, black, yellow, green, orange -- which is also the
 // striping on the post. Hexes are mirrored in the setup markup above.
@@ -553,8 +554,8 @@ function courtSvg(){
   Object.keys(groups).forEach(function(key){
     var g = groups[key], q = nodeAt(g.n.x, g.n.y), k = g.ids.length;
     var rows = Math.ceil(k / 2), cols = Math.min(k, 2);
-    // 13px clears the arch; rows grow away from the hoop in both directions.
-    var top = g.up ? q.y - 13 - (rows - 1) * GRID : q.y + 13;
+    // GAP clears the arch with air to spare; rows grow away from the hoop.
+    var top = g.up ? q.y - GAP - (rows - 1) * GRID : q.y + GAP;
     g.ids.forEach(function(id, idx){
       var m = META[S.balls[id].c];
       var dx = (idx % 2 - (cols - 1) / 2) * GRID;
